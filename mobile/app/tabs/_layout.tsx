@@ -1,14 +1,21 @@
-import { BottomTabBar } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabBar,
+  BottomTabNavigationOptions,
+} from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
 
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
-const getTabOptions = (label: string) => {
+const getTabOptions = (): BottomTabNavigationOptions => {
   return {
-    tabBarLabel: label,
+    tabBarShowLabel: false,
+    tabBarStyle: {
+      padding: 12,
+      backgroundColor: "#171717",
+    },
     tabBarActiveTintColor: "#fff",
     tabBarInactiveTintColor: "#4d4d4d",
     tabBarActiveBackgroundColor: "#171717",
@@ -38,7 +45,7 @@ const HomeTabs = () => {
       <Tabs.Screen
         name="home"
         options={{
-          ...getTabOptions("home"),
+          ...getTabOptions(),
           tabBarIcon: ({ color }: { color: string }) => (
             <FontAwesome name="home" size={24} color={color} />
           ),
@@ -47,9 +54,18 @@ const HomeTabs = () => {
       <Tabs.Screen
         name="send"
         options={{
-          ...getTabOptions("home"),
+          ...getTabOptions(),
           tabBarIcon: ({ color }: { color: string }) => (
-            <Ionicons name="send" size={24} color={color} />
+            <AntDesign name="camerao" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="friends"
+        options={{
+          ...getTabOptions(),
+          tabBarIcon: ({ color }: { color: string }) => (
+            <AntDesign name="adduser" size={24} color={color} />
           ),
         }}
       />

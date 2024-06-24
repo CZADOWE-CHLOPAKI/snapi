@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.0.242:8888/api/v1";
+const BASE_URL = "http://localhost:8080/api/v1";
 export const loginToBackend = async (email: string, password: string) => {
   // Instead of using FormData, directly use URLSearchParams with the data
   const formData = new URLSearchParams();

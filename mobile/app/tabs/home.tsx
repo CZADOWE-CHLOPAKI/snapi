@@ -1,5 +1,4 @@
 import { BreakLine } from "@/components/BreakLine";
-import PendingFriendsList from "@/components/PendingFriendsList";
 import { USERS } from "@/mocks/users_mock";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
@@ -80,12 +79,6 @@ export default function Home() {
     <SafeAreaView>
       <View className="">
         <View className="flex h-full bg-gray-dark  justify-start items-center">
-          <View>
-            <Text className="text-white font-semibold text-xl  px-4 py-4">
-              friend invitations
-            </Text>
-            <PendingFriendsList />
-          </View>
           <BreakLine />
           <View>
             <Text className="text-white font-semibold text-xl  px-4 py-4">
