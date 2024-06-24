@@ -1,8 +1,6 @@
-import { BreakLine } from "@/components/BreakLine";
 import { USERS } from "@/mocks/users_mock";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
-import { Link } from "expo-router";
 import {
   FlatList,
   SafeAreaView,
@@ -58,14 +56,14 @@ export default function Home() {
     return (
       <TouchableOpacity
         className={clsx(
-          "bg-gray-dark px-6 h-12 flex items-center flex-row w-full  justify-start mb-2"
+          "bg-gray-dark px-6 flex items-center flex-row w-full  justify-start py-2"
         )}
       >
-        <Text className="text-white text-xl mr-4">{name}</Text>
+        <Text className="text-white text-lg mr-4">{name}</Text>
 
         {dayCounter > 0 && (
           <View className="flex flex-row items-center justify-end mr-4">
-            <Text className="text-2xl text-white  pr-2">{dayCounter}</Text>
+            <Text className="text-lg text-white  pr-2">{dayCounter}</Text>
             <FontAwesome name="bolt" size={24} color="white" />
           </View>
         )}
@@ -77,9 +75,8 @@ export default function Home() {
 
   return (
     <SafeAreaView>
-      <View className="">
-        <View className="flex h-full bg-gray-dark  justify-start items-center">
-          <BreakLine />
+      <View className="py-4 bg-gray-dark ">
+        <View className="flex h-full  justify-start items-center">
           <View>
             <Text className="text-white font-semibold text-xl  px-4 py-4">
               friends
@@ -90,14 +87,6 @@ export default function Home() {
               renderItem={({ item }) => <UserRow user={item} />}
               keyExtractor={(item) => item.id}
             />
-          </View>
-        </View>
-
-        <View className="w-full bg-transparent h-20 flex justify-end">
-          <View className="flex flex-row justify-end pb-4 pr-6 ">
-            <Link href="/camera">
-              <AntDesign name="camerao" size={72} color="black" />
-            </Link>
           </View>
         </View>
       </View>
