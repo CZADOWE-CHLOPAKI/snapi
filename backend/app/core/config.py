@@ -96,6 +96,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
 
+    # files
+    FILE_STORAGE_PATH: str = "/app/app/photos"  # just for development
+
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
             message = (
