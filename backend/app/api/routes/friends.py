@@ -43,6 +43,19 @@ def get_friends(
     return GetFriendsPublic(friends=friends_filtered)
 
 
+@router.get("/discover", response_model=GetFriendsPublic)
+def discover_friends(
+    session: SessionDep, current_user: CurrentUser, q: str) -> Any:
+    """
+    Retrieve friends.
+    """
+    # search users with tag like q if q is not None
+    statement = select(User).where(User.id != current_user.id).where(User.tag.like(f"%{q}%"))
+
+    friends = session.exec(statement).all()
+    return GetFriendsPublic(friends=[friend.tag for friend in friends])
+
+
 @router.get("/pending", response_model=GetFriendsPublic)
 def get_pending_friends(
     session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100, q: str = None) -> Any:
