@@ -1,19 +1,11 @@
-import { TextEditor } from "@/components/TextEditor";
 import { usePictureContext } from "@/context/PictureContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 const PictureEditor = () => {
   const { pictureFileLocation } = usePictureContext();
-
-  const [textInputVisible, setTextInputVisible] = useState(false);
-
-  const onTextPress = () => {
-    setTextInputVisible((prev) => !prev);
-  };
 
   const onSend = () => {
     router.navigate("/tabs/send/sendPicture");
@@ -21,7 +13,6 @@ const PictureEditor = () => {
 
   return (
     <View className="relative bg-transparent">
-      {textInputVisible && <TextEditor onChange={(t) => console.log(t)} />}
       <View className="absolute  top-0 left-0 w-full h-full flex justify-between  z-10  ">
         {/* <View className="flex flex-row w-full justify-end py-2 px-3 ">
           <TouchableOpacity

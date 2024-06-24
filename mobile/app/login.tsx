@@ -18,9 +18,6 @@ const Login = () => {
   const { setToken } = useUserContext();
 
   const handleSubmit = async () => {
-    router.replace("/tabs");
-    return;
-
     if (!email || !password) {
       setError("Please fill in all fields");
       return;

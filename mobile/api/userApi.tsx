@@ -4,19 +4,23 @@ export const loginToBackend = async (email: string, password: string) => {
   const formData = new URLSearchParams();
   formData.append("username", email);
   formData.append("password", password);
+  let data;
 
-  // Modify the fetch call
-  const response = await fetch(`${BASE_URL}/login/access-token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    // Directly use formData which is now a URLSearchParams instance
-    body: formData.toString(),
-  });
-
-  const data = await response.json();
-  const token = data.access_token;
+  try {
+    const response = await fetch(`${BASE_URL}/login/access-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      // Directly use formData which is now a URLSearchParams instance
+      body: formData.toString(),
+    });
+    console.log(await response.json());
+    // data = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+  const token = data?.access_token;
   const error = data?.detail;
 
   return { token, error };
