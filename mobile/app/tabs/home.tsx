@@ -1,7 +1,9 @@
-import { USERS } from "@/mocks/users_mock";
+import { useFetcher } from "@/hooks/useFetcher";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import clsx from "clsx";
 import {
+  ActivityIndicator,
   FlatList,
   SafeAreaView,
   Text,
@@ -10,6 +12,9 @@ import {
 } from "react-native";
 
 export default function Home() {
+  const { data, isLoading, refresh } = useFetcher("/friends", "GET", () => {});
+  const friends = (data?.friends || []) as string[];
+
   const UserRow = ({ user }: { user: UserType }) => {
     const { name, recievedMessagesNotSeen, dayCounter } = user;
 
@@ -75,20 +80,53 @@ export default function Home() {
 
   return (
     <SafeAreaView>
+      <View>
+        <TouchableOpacity
+          onPress={async () => {
+            AsyncStorage.clear();
+          }}
+        >
+          <Text>press here to delete asyncstorage</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            refresh();
+          }}
+        >
+          <Text>press here to refresh friends</Text>
+        </TouchableOpacity>
+      </View>
       <View className="py-4 bg-gray-dark ">
-        <View className="flex h-full  justify-start items-center">
-          <View>
-            <Text className="text-white font-semibold text-xl  px-4 py-4">
-              friends
-            </Text>
-            <FlatList
-              className="flex-grow-0"
-              data={USERS}
-              renderItem={({ item }) => <UserRow user={item} />}
-              keyExtractor={(item) => item.id}
-            />
+        {isLoading ? (
+          <View className="h-full w-full flex justify-center items-center">
+            <ActivityIndicator color="white" className="pb-60" />
           </View>
-        </View>
+        ) : (
+          <View className="flex h-full  justify-start items-center">
+            <View>
+              <Text className="text-white font-semibold text-xl  px-4 py-4">
+                friends
+              </Text>
+              <FlatList
+                className="flex-grow-0"
+                data={friends}
+                renderItem={({ item }) => (
+                  <UserRow
+                    user={{
+                      name: item,
+                      dayCounter: 10,
+                      sentMessagesNotSeen: 4,
+                      recievedMessagesNotSeen: 10,
+                    }}
+                  />
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

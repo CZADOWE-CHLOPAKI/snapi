@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:8888/api/v1";
+import { BASE_URL } from "./apiSettings";
+
 export const loginToBackend = async (email: string, password: string) => {
   // Instead of using FormData, directly use URLSearchParams with the data
   const formData = new URLSearchParams();

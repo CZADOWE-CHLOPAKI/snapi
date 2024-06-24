@@ -1,4 +1,4 @@
-import { registerToBackend } from "@/api/userApi";
+import { registerToBackend } from "@/api/authApi";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {

@@ -1,4 +1,4 @@
-import { loginToBackend } from "@/api/userApi";
+import { loginToBackend } from "@/api/authApi";
 import { useUserContext } from "@/context/UserContext";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
