@@ -9,13 +9,12 @@ import {
 } from "react-native";
 
 const Register = () => {
-  const [email, setEmail] = useState("jan.cz@gmail.com");
-  const [password, setPassword] = useState("root");
+  const [email, setEmail] = useState("jan.czerwinski@gmail.com");
+  const [password, setPassword] = useState("rootroot");
 
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState("dzbanek");
 
   const handleSubmit = async () => {
-    console.log("askhdaskjaskjhdasjkbdbhksadbhjk");
     if (!email || !password || !tag) {
       return;
     }

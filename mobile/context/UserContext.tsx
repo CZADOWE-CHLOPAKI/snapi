@@ -1,4 +1,11 @@
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import { getData, storeData } from "@/utils/asyncStorage";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type UserContextType = {
   userName: string;
@@ -11,7 +18,20 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [userName, setUserName] = useState<string>("");
-  const [token, setToken] = useState();
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      if (!token) {
+        const storedToken = await getData("token");
+        if (storedToken) {
+          setToken(storedToken);
+        }
+      } else {
+        await storeData("token", token);
+      }
+    })();
+  }, [token]);
 
   return (
     <UserContext.Provider value={{ userName, setUserName, token, setToken }}>

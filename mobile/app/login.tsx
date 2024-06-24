@@ -1,7 +1,7 @@
 import { loginToBackend } from "@/api/userApi";
 import { useUserContext } from "@/context/UserContext";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Text,
@@ -10,12 +10,16 @@ import {
 } from "react-native";
 
 const Login = () => {
-  const [email, setEmail] = useState("user@example.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("jan.czerwinski@gmail.com");
+  const [password, setPassword] = useState("rootroot");
 
   const [error, setError] = useState("");
 
-  const { setToken } = useUserContext();
+  const { setToken, token } = useUserContext();
+
+  useEffect(() => {
+    if (token !== "") router.replace("/tabs");
+  }, [token]);
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -58,7 +62,7 @@ const Login = () => {
       >
         <Text className="text-white text-center">Submit</Text>
       </TouchableOpacity>
-      {error && <Text className="text-error">{error}</Text>}
+      {error !== "" && <Text className="text-error">{error}</Text>}
       <TouchableOpacity
         onPress={() => router.navigate("/register")}
         className="mt-4"
