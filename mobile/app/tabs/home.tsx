@@ -1,7 +1,7 @@
-import { useFetcher } from "@/hooks/useFetcher";
+import { useFriends } from "@/hooks/useFriends";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import clsx from "clsx";
+
 import {
   ActivityIndicator,
   FlatList,
@@ -12,8 +12,7 @@ import {
 } from "react-native";
 
 export default function Home() {
-  const { data, isLoading, refresh } = useFetcher("/friends", "GET", () => {});
-  const friends = (data?.friends || []) as string[];
+  const { friends, isFriendsReady, refreshFriends } = useFriends();
 
   const UserRow = ({ user }: { user: UserType }) => {
     const { name, recievedMessagesNotSeen, dayCounter } = user;
@@ -82,24 +81,15 @@ export default function Home() {
     <SafeAreaView>
       <View>
         <TouchableOpacity
-          onPress={async () => {
-            AsyncStorage.clear();
-          }}
-        >
-          <Text>press here to delete asyncstorage</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity
           onPress={() => {
-            refresh();
+            refreshFriends();
           }}
         >
           <Text>press here to refresh friends</Text>
         </TouchableOpacity>
       </View>
       <View className="py-4 bg-gray-dark ">
-        {isLoading ? (
+        {isFriendsReady ? (
           <View className="h-full w-full flex justify-center items-center">
             <ActivityIndicator color="white" className="pb-60" />
           </View>
@@ -122,7 +112,7 @@ export default function Home() {
                     }}
                   />
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item}
               />
             </View>
           </View>

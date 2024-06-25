@@ -1,14 +1,11 @@
-import { useUserContext } from "@/context/UserContext";
-import { useState } from "react";
 import { useFetcher } from "./useFetcher";
 
 export const useFriends = () => {
-  const [friends, setFriends] = useState<string[]>([]);
-  const [isFriendsReady, setIsFriendsReady] = useState(false);
-  const { token } = useUserContext();
-  const { data } = useFetcher(`/friends`, "GET", () => {
-    setIsFriendsReady(true);
-  });
+  const { data, refresh, isLoading } = useFetcher(`/friends`, "GET");
 
-  return { friends, isFriendsReady };
+  return {
+    friends: data?.friends,
+    isFriendsReady: isLoading,
+    refreshFriends: refresh,
+  };
 };

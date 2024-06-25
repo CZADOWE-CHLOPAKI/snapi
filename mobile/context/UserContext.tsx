@@ -2,6 +2,7 @@ import { getData, storeData } from "@/utils/asyncStorage";
 import React, {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -12,6 +13,7 @@ type UserContextType = {
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
+  clear: () => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -33,8 +35,15 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, [token]);
 
+  const clear = useCallback(() => {
+    setToken("");
+    setUserName("");
+  }, []);
+
   return (
-    <UserContext.Provider value={{ userName, setUserName, token, setToken }}>
+    <UserContext.Provider
+      value={{ userName, setUserName, token, setToken, clear }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -2,7 +2,7 @@ import { usePictureContext } from "@/context/PictureContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Platform,
@@ -16,7 +16,11 @@ const Camera = () => {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
-  const { setPictureFileLocation } = usePictureContext();
+  const { pictureFileLocation, setPictureFileLocation } = usePictureContext();
+
+  useEffect(() => {
+    console.log("pictureFilelocation ", pictureFileLocation);
+  }, [pictureFileLocation]);
 
   if (!permission) {
     // Camera permissions are still loading.

@@ -7,7 +7,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
 
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 
 const getTabOptions = (): BottomTabNavigationOptions => {
   return {
@@ -66,6 +66,15 @@ const HomeTabs = () => {
           ...getTabOptions(),
           tabBarIcon: ({ color }: { color: string }) => (
             <AntDesign name="adduser" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          ...getTabOptions(),
+          tabBarIcon: ({ color }: { color: string }) => (
+            <Ionicons name="settings-outline" size={24} color={color} />
           ),
         }}
       />

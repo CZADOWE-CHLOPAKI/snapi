@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { USERS } from "@/mocks/users_mock";
+import { useFriends } from "@/hooks/useFriends";
 import { Ionicons } from "@expo/vector-icons";
 import clsx from "clsx";
 import { router } from "expo-router";
@@ -30,7 +30,8 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
 };
 
 const SendPicture = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const { friends, isFriendsReady } = useFriends();
 
   const onSend = async () => {
     // TODO: send picture to selected users
@@ -41,15 +42,15 @@ const SendPicture = () => {
   return (
     <View className="bg-gray-medium h-full flex justify-center pt-8 ">
       <FlatList
-        data={USERS}
+        data={friends}
         renderItem={({ item }) => (
           <User
-            name={item.name}
+            name={item}
             onSelected={() => {
-              setSelectedIds([...selectedIds, item.id]);
+              setSelectedTags([...selectedTags, item]);
             }}
             onDeSelected={() => {
-              setSelectedIds(selectedIds.filter((id) => id !== item.id));
+              setSelectedTags(selectedTags.filter((tag) => tag !== item));
             }}
             dayCounter={item.dayCounter}
             sentMessagesNotSeen={item.sentMessagesNotSeen}
@@ -59,7 +60,7 @@ const SendPicture = () => {
         keyExtractor={(item) => item.id}
       />
       <View className="px-6 py-8 flex flex-row justify-end">
-        {selectedIds.length > 0 ? (
+        {selectedTags.length > 0 ? (
           <TouchableOpacity onPress={onSend}>
             <Ionicons name="send" size={32} color="white" />
           </TouchableOpacity>

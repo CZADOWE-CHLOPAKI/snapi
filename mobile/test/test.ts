@@ -1,30 +1,21 @@
-const BASE_URL = "http://192.168.0.242:8888/api/v1";
+const baseUrl = "http://localhost:8888/api/v1/friends";
+const token =
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTk5NTM4MjIsInN1YiI6IjIifQ.8gUM2JIflr6kzsTGIWB1NmnIMBgeIYJukMQCu7Il8N4";
 
-export const loginToBackend = async (email: string, password: string) => {
-  const token = "";
-  const error = "";
+async function fetchFriends() {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching friends:", error);
+  }
+}
 
-  const response = await fetch(`${BASE_URL}/login/access-token`, {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-  });
-
-  const data = await response.json();
-  console.log(data);
-
-  return { token, error };
-};
-
-export const registerToBackend = async (email: string, password: string) => {
-  const token = "";
-  const error = "";
-
-  await fetch(`${BASE_URL}/users/signup`, {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-  });
-
-  return { token, error };
-};
-
-loginToBackend("user@example.com", "password");
+fetchFriends();

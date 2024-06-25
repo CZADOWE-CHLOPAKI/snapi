@@ -1,28 +1,14 @@
 import { BASE_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
-import { useCallback, useEffect, useState } from "react";
+import { useFetcher } from "./useFetcher";
 
 export const usePendingFriends = () => {
   const { token } = useUserContext();
-
-  const [pendingFriends, setPendingFriends] = useState<string[]>([]);
-  const [isGettingPendingFriends, setIsGettingPendingFriends] = useState(false);
-
-  const refreshPendingFriends = useCallback(() => {
-    setIsGettingPendingFriends(true);
-    (async () => {
-      const response = await fetch(`${BASE_URL}/friends/pending`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      setPendingFriends(data?.friends as string[]);
-      setIsGettingPendingFriends(false);
-    })();
-  }, [token]);
-
-  useEffect(refreshPendingFriends, [refreshPendingFriends]);
+  const { data, isLoading, refresh } = useFetcher(
+    "/friends/pending",
+    "GET",
+    {}
+  );
 
   const acceptFriendRequest = async (tag: string) => {
     const response = await fetch(`${BASE_URL}/friends/pending/accept/${tag}`, {
@@ -33,11 +19,15 @@ export const usePendingFriends = () => {
       },
       body: JSON.stringify({ friend: tag }),
     });
-    const data = await response.json();
-    console.log("ACCEPT FRIEND DATA");
-    console.log(data);
-    refreshPendingFriends();
+    // const data = await response.json();
+
+    refresh();
   };
 
-  return { pendingFriends, isGettingPendingFriends, acceptFriendRequest };
+  return {
+    pendingFriends: data?.friends,
+    isGettingPendingFriends: isLoading,
+    refreshPendingFriends: refresh,
+    acceptFriendRequest,
+  };
 };
