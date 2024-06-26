@@ -1,10 +1,11 @@
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from sqlmodel import func, select, or_
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message, GetFriendsPublic, User, Friend
+from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message, User, Friend, UserPhoto
 
 router = APIRouter()
 
@@ -15,6 +16,16 @@ router = APIRouter()
 # POST friends/invite/{tag} (zaproszenie do znajomych) // delete on reject
 # POST friends/accept/{tag} (akceptacja zaproszenia do znajomych)
 # POST friends/reject/{tag} (akceptacja zaproszenia do znajomych)
+
+
+class GetFriendPublic(BaseModel):
+    tag: str
+    photos: list[str]
+    streak: int
+
+
+class GetFriendsPublic(BaseModel):
+    friends: list[GetFriendPublic]
 
 
 @router.get("/", response_model=GetFriendsPublic)
@@ -37,8 +48,14 @@ def get_friends(
             statement = select(User).where(User.id == friend.user_2_id)
         else:
             statement = select(User).where(User.id == friend.user_1_id)
-        friend = session.exec(statement).first()
-        friends_filtered.append(friend.tag)
+        friend_user = session.exec(statement).first()
+        # get photos
+        statement = select(UserPhoto).where(UserPhoto.sender_id == friend_user.id).where(UserPhoto.recipient_id == current_user.id)
+        photos = session.exec(statement).all()
+        photo_sources = []
+        for photo in photos:
+            photo_sources.append(photo.photo.source)
+        friends_filtered.append(GetFriendPublic(tag=friend_user.tag, photos=photo_sources, streak=friend.streak))
 
     return GetFriendsPublic(friends=friends_filtered)
 

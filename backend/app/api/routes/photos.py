@@ -54,7 +54,7 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: Uploa
         user = session.exec(user_st).first()
         if user is None:
             raise HTTPException(status_code=400, detail="Invalid friend")
-        statement = UserPhoto(user_id=user.id, photo_id=photo_db.id)
+        statement = UserPhoto(sender_id=current_user.id, recipient_id=user.id, photo_id=photo_db.id)
         session.add(statement)
 
     session.commit()

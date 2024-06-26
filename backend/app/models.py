@@ -1,4 +1,5 @@
-from pydantic import EmailStr, BaseModel
+from pydantic import EmailStr
+from sqlalchemy.orm import relationship
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -47,7 +48,11 @@ class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner")
-    user_photos: list["UserPhoto"] = Relationship(back_populates="user")
+    # sender_photos: list["UserPhoto"] = Relationship(back_populates="sender")
+    # sender_photos: list["UserPhoto"] = Relationship(back_populates="sender", sa_relationship_kwargs=dict(foreign_keys="[UserPhoto.sender_id]"))
+    # recipient_photos: list["UserPhoto"] = Relationship(back_populates="recipient", sa_relationship_kwargs=dict(foreign_keys="[UserPhoto.recipient_id]"))
+    # recipient_photos: list["UserPhoto"] = Relationship(back_populates="recipient")
+
 
 
 # Properties to return via API, id is always required
@@ -134,10 +139,6 @@ class Friend(FriendBase, table=True):
     pass
 
 
-class GetFriendsPublic(BaseModel):
-    friends: list[str]
-
-
 ## PHOTOS ----------------------------
 # TODO divide the file you lazy fuck
 
@@ -169,8 +170,13 @@ class UserPhoto(UserPhotoBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     seen: bool = False
 
-    user: User | None = Relationship(back_populates="user_photos")
-    user_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
+    # recipient: User | None = Relationship(back_populates="recipient_photos")
+    # recipient: User | None = Relationship(sa_relationship_kwargs=dict(foreign_keys="[User.recipient_photos]"))
+    recipient_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
+
+    # sender: User | None = Relationship(back_populates="sender_photos")
+    # sender: User | None = Relationship(sa_relationship_kwargs=dict(foreign_keys="[User.sender_photos]"))
+    sender_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
 
     photo: Photo | None = Relationship(back_populates="user_photos")
     photo_id: int | None = Field(default=None, foreign_key="photo.id", nullable=False)
