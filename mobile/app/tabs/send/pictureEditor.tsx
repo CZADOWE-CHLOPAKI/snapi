@@ -1,5 +1,5 @@
 import { usePictureContext } from "@/context/PictureContext";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
@@ -22,9 +22,9 @@ const PictureEditor = () => {
             <Ionicons name="text" size={20} color="white" />
           </TouchableOpacity>
         </View> */}
-        <View className="flex flex-row w-full justify-end py-4 px-6 ">
-          <TouchableOpacity onPress={onSend}>
-            <Ionicons name="send" size={32} color="white" />
+        <View className="flex h-full w-full items-end justify-end py-4 px-6 ">
+          <TouchableOpacity className="p-6" onPress={onSend}>
+            <FontAwesome name="send-o" size={38} color="white" />
           </TouchableOpacity>
         </View>
       </View>

@@ -2,9 +2,8 @@ import { usePictureContext } from "@/context/PictureContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
-  Button,
   Platform,
   SafeAreaView,
   Text,
@@ -18,10 +17,6 @@ const Camera = () => {
   const cameraRef = useRef<CameraView>(null);
   const { pictureFileLocation, setPictureFileLocation } = usePictureContext();
 
-  useEffect(() => {
-    console.log("pictureFilelocation ", pictureFileLocation);
-  }, [pictureFileLocation]);
-
   if (!permission) {
     // Camera permissions are still loading.
     return <View />;
@@ -30,11 +25,18 @@ const Camera = () => {
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <View className={"flex-1 justify-center"}>
-        <Text className={"text-center"}>
-          We need your permission to show the camera
+      <View className={"flex-1 justify-center bg-gray-dark pb-40"}>
+        <Text className="text-center text-lg mb-4 text-white">
+          we need the permission{"\n"}to use your camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Text className="text-center mb-8 text-white">
+          after all, its a photo app
+        </Text>
+        <TouchableOpacity onPress={requestPermission}>
+          <Text className="text-center text-xl p-6 text-white">
+            grant camera permission
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }

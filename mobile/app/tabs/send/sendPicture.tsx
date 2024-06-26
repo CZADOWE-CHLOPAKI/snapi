@@ -1,6 +1,10 @@
+import { sendPhoto } from "@/api/imageApi";
 import { ThemedText } from "@/components/ThemedText";
+import { usePictureContext } from "@/context/PictureContext";
 import { useFriends } from "@/hooks/useFriends";
+
 import { Ionicons } from "@expo/vector-icons";
+
 import clsx from "clsx";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -31,11 +35,11 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
 
 const SendPicture = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const { friends, isFriendsReady } = useFriends();
+  const { friends } = useFriends();
+  const { pictureFileLocation } = usePictureContext();
 
   const onSend = async () => {
-    // TODO: send picture to selected users
-
+    await sendPhoto(pictureFileLocation, selectedTags);
     router.replace("/");
   };
 
@@ -57,7 +61,7 @@ const SendPicture = () => {
             recievedMessagesNotSeen={item.recievedMessagesNotSeen}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item}
       />
       <View className="px-6 py-8 flex flex-row justify-end">
         {selectedTags.length > 0 ? (

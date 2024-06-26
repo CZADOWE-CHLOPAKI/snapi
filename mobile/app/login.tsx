@@ -15,7 +15,7 @@ const Login = () => {
 
   const [error, setError] = useState("");
 
-  const { setToken, token } = useUserContext();
+  const { setToken, token, setUserName } = useUserContext();
 
   useEffect(() => {
     if (token !== "") router.replace("/tabs");

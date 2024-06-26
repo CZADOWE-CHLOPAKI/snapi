@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 const Settings = () => {
-  const { clear: clearUsers } = useUserContext();
+  const { clear: clearUsers, userName } = useUserContext();
   const logOut = () => {
     AsyncStorage.clear();
     clearUsers();
@@ -13,6 +13,9 @@ const Settings = () => {
   return (
     <SafeAreaView className="h-full bg-gray-dark py-4">
       <View className="h-full flex items-center justify-center pb-40">
+        <View className="p-8 text-center">
+          <Text className="text-white text-lg">Hi @{userName}!</Text>
+        </View>
         <TouchableOpacity onPress={() => logOut()}>
           <Text className="text-white text-lg">log out</Text>
         </TouchableOpacity>
