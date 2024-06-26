@@ -59,3 +59,15 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: Uploa
 
     return CreatePhotoResponse(id=0)
 
+
+@router.get("/", response_model=None)
+def get_unseen_photos(session: SessionDep, current_user: CurrentUser):
+    statement = select(UserPhoto).where(UserPhoto.user_id == current_user.id).where(UserPhoto.seen == False)
+    user_photos = session.exec(statement).all()
+
+    photos = []
+    for user_photo in user_photos:
+        photo = session.get(Photo, user_photo.photo_id)
+        photos.append(photo.source)
+
+    return photos
