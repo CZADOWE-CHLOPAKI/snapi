@@ -5,8 +5,7 @@ from pydantic import BaseModel
 from sqlmodel import Field, SQLModel, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.core.config import settings
-from app.interfaces.files import OnDiskFileStorage
+from app.interfaces.files import OnDiskImageStorage
 from app.models import Photo, UserPhoto, User
 
 router = APIRouter()
@@ -25,6 +24,7 @@ class CreatePhoto(SQLModel):
 
 class CreatePhotoResponse(BaseModel):
     id: int
+    filename: str
 
 
 @router.post("/", response_model=None)
@@ -40,8 +40,8 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: Uploa
 
     # TODO transaction for creating the records
 
-    file_storage = OnDiskFileStorage()
-    filename = file_storage.save(photo.file.read())
+    image_storage = OnDiskImageStorage()
+    filename = image_storage.save(photo.file)
 
     photo_db = Photo(source=filename)
     session.add(photo_db)
@@ -52,22 +52,11 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: Uploa
         # TODO check if the friend is already a friend, if not then dont create UserPhoto for this user
         user_st = select(User).where(User.tag == friend)
         user = session.exec(user_st).first()
+        if user is None:
+            raise HTTPException(status_code=400, detail="Invalid friend")
         statement = UserPhoto(user_id=user.id, photo_id=photo_db.id)
         session.add(statement)
 
     session.commit()
 
-    return CreatePhotoResponse(id=0)
-
-
-@router.get("/", response_model=None)
-def get_unseen_photos(session: SessionDep, current_user: CurrentUser):
-    statement = select(UserPhoto).where(UserPhoto.user_id == current_user.id).where(UserPhoto.seen == False)
-    user_photos = session.exec(statement).all()
-
-    photos = []
-    for user_photo in user_photos:
-        photo = session.get(Photo, user_photo.photo_id)
-        photos.append(photo.source)
-
-    return photos
+    return CreatePhotoResponse(id=0, filename=filename)

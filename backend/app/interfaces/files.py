@@ -1,6 +1,9 @@
 import abc
 import uuid
 from pathlib import Path
+from typing import BinaryIO
+
+from PIL import Image
 
 from app.core.config import settings
 
@@ -27,15 +30,16 @@ class FileStorage:
         return str(uuid.uuid4())
 
 
-class OnDiskFileStorage(FileStorage):
-    def save(self, file: bytes):
-        # TODO save in chunks
-        filename = self._generate_unique_filename()
+class OnDiskImageStorage(FileStorage):
+    def save(self, file: BinaryIO):
+        filename = f'{self._generate_unique_filename()}.jpg'
         filepath = Path(settings.FILE_STORAGE_PATH) / filename
 
         try:
-            with open(filepath, "wb") as f:
-                f.write(file)
+            # TODO might wanna check that the file is actually an image
+            im = Image.open(file)
+            rgb_im = im.convert('RGB')
+            rgb_im.save(filepath)
         except Exception as e:
             raise self.FileStorageException from e
 
