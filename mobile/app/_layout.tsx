@@ -19,6 +19,10 @@ export default function RootLayout() {
       <UserContextProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen
+            name="test"
+            options={getNavigationOptions("test") as any}
+          />
+          <Stack.Screen
             name="login"
             options={getNavigationOptions("login") as any}
           />

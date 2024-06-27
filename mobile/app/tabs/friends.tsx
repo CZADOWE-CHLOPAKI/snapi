@@ -42,7 +42,7 @@ const Friends = () => {
             <PendingFriendsList
               label={"friend invitations"}
               displayTrashCan={true}
-              tags={pendingFriends}
+              friends={pendingFriends}
               onPlusClick={(tag) => acceptFriendRequest(tag)}
             />
           )}

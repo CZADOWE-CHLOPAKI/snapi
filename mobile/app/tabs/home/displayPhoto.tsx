@@ -1,11 +1,20 @@
 import { usePictureContext } from "@/context/PictureContext";
+import { useEffect } from "react";
 import { Image, View } from "react-native";
 
 const DisplayPhoto = () => {
   const { pictureFileLocation } = usePictureContext();
+  useEffect(() => {
+    console.log(pictureFileLocation);
+  }, [pictureFileLocation]);
   return (
     <View>
-      <Image source={{ uri: pictureFileLocation }} className="w-full h-full" />
+      {pictureFileLocation && (
+        <Image
+          source={{ uri: pictureFileLocation }}
+          className="w-full h-full"
+        />
+      )}
     </View>
   );
 };

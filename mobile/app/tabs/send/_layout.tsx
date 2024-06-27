@@ -1,4 +1,3 @@
-import { PictureContextProvider } from "@/context/PictureContext";
 import { UserContextProvider } from "@/context/UserContext";
 
 import { Stack } from "expo-router";
@@ -15,23 +14,21 @@ const getNavigationOptions = (title: string): NativeStackNavigationOptions => ({
 
 export default function RootLayout() {
   return (
-    <PictureContextProvider>
-      <UserContextProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="camera"
-            options={getNavigationOptions("camera") as any}
-          />
-          <Stack.Screen
-            name="pictureEditor"
-            options={getNavigationOptions("picture editor") as any}
-          />
-          <Stack.Screen
-            name="sendPicture"
-            options={getNavigationOptions("send editor") as any}
-          />
-        </Stack>
-      </UserContextProvider>
-    </PictureContextProvider>
+    <UserContextProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name="camera"
+          options={getNavigationOptions("camera") as any}
+        />
+        <Stack.Screen
+          name="pictureEditor"
+          options={getNavigationOptions("picture editor") as any}
+        />
+        <Stack.Screen
+          name="sendPicture"
+          options={getNavigationOptions("send editor") as any}
+        />
+      </Stack>
+    </UserContextProvider>
   );
 }

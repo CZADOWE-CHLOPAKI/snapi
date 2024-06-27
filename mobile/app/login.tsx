@@ -69,6 +69,12 @@ const Login = () => {
       >
         <Text className="text-white">Don't have an account? Register</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => router.navigate("/test")}
+        className="bg-blue-500 p-4 rounded-lg w-80 mb-4"
+      >
+        <Text className="text-white text-center">dev menu</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };

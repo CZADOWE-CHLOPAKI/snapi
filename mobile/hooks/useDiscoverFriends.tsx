@@ -12,8 +12,8 @@ export const useDiscoverFriends = () => {
     "q=" + searchString
   );
 
-  console.log("useDiscoverFriends data");
-  console.log(data);
+  // console.log("useDiscoverFriends data");
+  // console.log(data);
 
   return {
     isDiscoverFriendsLoading: isLoading,
