@@ -1,7 +1,8 @@
-import { sendPhoto } from "@/api/imageApi";
 import { ThemedText } from "@/components/ThemedText";
 import { usePictureContext } from "@/context/PictureContext";
 import { useFriends } from "@/hooks/useFriends";
+import { useSendPhoto } from "@/hooks/useSendPhoto";
+import { SingleFriendType } from "@/types/friend";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -34,12 +35,16 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
 };
 
 const SendPicture = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const { sendPhoto } = useSendPhoto();
+
+  const [selectedFriends, setSelectedFriends] = useState<SingleFriendType[]>(
+    []
+  );
   const { friends } = useFriends();
   const { pictureFileLocation } = usePictureContext();
 
   const onSend = async () => {
-    await sendPhoto(pictureFileLocation, selectedTags);
+    await sendPhoto(pictureFileLocation, selectedFriends);
     router.replace("/");
   };
 
@@ -49,22 +54,22 @@ const SendPicture = () => {
         data={friends}
         renderItem={({ item }) => (
           <User
-            name={item}
+            name={item.tag}
             onSelected={() => {
-              setSelectedTags([...selectedTags, item]);
+              setSelectedFriends([...selectedFriends, item]);
             }}
             onDeSelected={() => {
-              setSelectedTags(selectedTags.filter((tag) => tag !== item));
+              setSelectedFriends(selectedFriends.filter((tag) => tag !== item));
             }}
             dayCounter={10}
             sentMessagesNotSeen={10}
             recievedMessagesNotSeen={10}
           />
         )}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.tag}
       />
       <View className="px-6 py-8 flex flex-row justify-end">
-        {selectedTags.length > 0 ? (
+        {selectedFriends.length > 0 ? (
           <TouchableOpacity onPress={onSend}>
             <Ionicons name="send" size={32} color="white" />
           </TouchableOpacity>
