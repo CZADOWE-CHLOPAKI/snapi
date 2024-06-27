@@ -14,7 +14,6 @@ const _sendPhoto = async (
   friends: SingleFriendType[]
 ) => {
   const friendTags = friends.map((friend) => friend.tag);
-  const friendsTagsString = friendTags.join(",");
   const base64 = await FileSystem.readAsStringAsync(uri, {
     encoding: "base64",
   });
@@ -26,7 +25,7 @@ const _sendPhoto = async (
         Authorization: `Bearer ${token}`,
       },
       method: "POST",
-      body: JSON.stringify({ photo: base64, friends: friendsTagsString }),
+      body: JSON.stringify({ photob64: base64, friends: friendTags }),
     });
     console.log(response);
   } catch (error) {
