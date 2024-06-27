@@ -36,20 +36,10 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
 
     friends = data.friends
     photob64 = data.photob64
-    photo = None
-
-    # try:
-    #     friends = [f.strip() for f in friends.split(",")]
-    # except Exception as e:
-    #     raise HTTPException(status_code=400, detail="Invalid friends")
-
     # TODO transaction for creating the records
 
-    if photo is None and photob64 is None:
-        raise HTTPException(status_code=400, detail="No photo provided")
-
     image_storage = OnDiskImageStorage()
-    filename = image_storage.save(photob64 or photo.file)
+    filename = image_storage.save(photob64)
 
     photo_db = Photo(source=filename)
     session.add(photo_db)

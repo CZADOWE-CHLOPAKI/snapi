@@ -42,15 +42,13 @@ class OnDiskImageStorage(FileStorage):
             image_as_bytes = str.encode(file)  # convert string to bytes
             file = base64.b64decode(image_as_bytes)  # decode base64string
 
-            try:
-                with open(filepath, "wb") as f:
-                    f.write(file)
-            except Exception:
-                return {"message": "There was an error uploading the file"}
-
             # im = Image.open(file)
             # rgb_im = im.convert('RGB')
             # rgb_im.save(filepath)
+            # TODO file type conversion
+            with open(filepath, "wb") as f:
+                f.write(file)
+
         except Exception as e:
             raise self.FileStorageException from e
 
