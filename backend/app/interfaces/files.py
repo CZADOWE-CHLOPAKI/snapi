@@ -1,4 +1,5 @@
 import abc
+import base64
 import uuid
 from pathlib import Path
 from typing import BinaryIO
@@ -31,15 +32,25 @@ class FileStorage:
 
 
 class OnDiskImageStorage(FileStorage):
-    def save(self, file: BinaryIO):
-        filename = f'{self._generate_unique_filename()}.jpg'
+    def save(self, file: BinaryIO | str):
+        filename = f'{self._generate_unique_filename()}.jpeg'
         filepath = Path(settings.FILE_STORAGE_PATH) / filename
 
         try:
             # TODO might wanna check that the file is actually an image
-            im = Image.open(file)
-            rgb_im = im.convert('RGB')
-            rgb_im.save(filepath)
+            # if file is string, convert form b64
+            image_as_bytes = str.encode(file)  # convert string to bytes
+            file = base64.b64decode(image_as_bytes)  # decode base64string
+
+            try:
+                with open(filepath, "wb") as f:
+                    f.write(file)
+            except Exception:
+                return {"message": "There was an error uploading the file"}
+
+            # im = Image.open(file)
+            # rgb_im = im.convert('RGB')
+            # rgb_im.save(filepath)
         except Exception as e:
             raise self.FileStorageException from e
 
