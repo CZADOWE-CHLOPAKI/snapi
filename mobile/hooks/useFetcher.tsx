@@ -3,12 +3,13 @@ import { useUserContext } from "@/context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 
-export const useFetcher = (
+export function useFetcher<T>(
   url: string,
   method: "POST" | "GET",
-  body?: unknown
-) => {
-  const [data, setData] = useState<any>({});
+  body?: unknown,
+  params?: string
+) {
+  const [data, setData] = useState<T>();
   const [isLoading, setLoading] = useState(false);
   const { token } = useUserContext();
 
@@ -21,7 +22,6 @@ export const useFetcher = (
 
   const refresh = useCallback(async () => {
     setLoading(true);
-    console.log("fetching");
     const options: { [k: string]: any } = {
       headers: {
         "Content-Type": "application/json",
@@ -34,8 +34,18 @@ export const useFetcher = (
     }
 
     try {
-      const response = await fetch(`${BASE_URL}${url}`, options);
+      let full_url = `${BASE_URL}${url}`;
+      if (params !== undefined) {
+        full_url = `${BASE_URL}${url}?${params}`;
+      }
+      const response = await fetch(full_url, options);
+
+      console.log("error below?");
+      console.log(response);
       const newData = await response.json();
+      console.log("newData");
+      console.log(newData);
+
       setData(newData);
     } catch (error) {
       console.error(error);
@@ -48,4 +58,4 @@ export const useFetcher = (
   }, []);
 
   return { data, isLoading, refresh };
-};
+}

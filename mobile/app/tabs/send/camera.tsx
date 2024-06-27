@@ -55,7 +55,7 @@ const Camera = () => {
       } else {
         console.error("No photo taken");
       }
-
+      console.log("photo from camera file");
       console.log(photo);
     }
   }

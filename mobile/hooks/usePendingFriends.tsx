@@ -9,6 +9,8 @@ export const usePendingFriends = () => {
     "GET",
     {}
   );
+  console.log("usePendingFriends data");
+  console.log(data);
 
   const acceptFriendRequest = async (tag: string) => {
     const response = await fetch(`${BASE_URL}/friends/pending/accept/${tag}`, {

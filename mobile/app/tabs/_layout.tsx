@@ -13,7 +13,6 @@ const getTabOptions = (): BottomTabNavigationOptions => {
   return {
     tabBarShowLabel: false,
     tabBarStyle: {
-      padding: 12,
       backgroundColor: "#171717",
     },
     tabBarActiveTintColor: "#fff",

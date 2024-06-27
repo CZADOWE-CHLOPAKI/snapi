@@ -56,9 +56,9 @@ const SendPicture = () => {
             onDeSelected={() => {
               setSelectedTags(selectedTags.filter((tag) => tag !== item));
             }}
-            dayCounter={item.dayCounter}
-            sentMessagesNotSeen={item.sentMessagesNotSeen}
-            recievedMessagesNotSeen={item.recievedMessagesNotSeen}
+            dayCounter={10}
+            sentMessagesNotSeen={10}
+            recievedMessagesNotSeen={10}
           />
         )}
         keyExtractor={(item) => item}

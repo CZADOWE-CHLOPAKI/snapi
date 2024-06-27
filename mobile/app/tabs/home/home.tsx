@@ -1,7 +1,8 @@
 import { useFriends } from "@/hooks/useFriends";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
-
+import { router } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -13,6 +14,10 @@ import {
 
 export default function Home() {
   const { friends, isFriendsReady, refreshFriends } = useFriends();
+
+  useEffect(() => {
+    console.log(friends);
+  }, []);
 
   const UserRow = ({ user }: { user: UserType }) => {
     const { name, recievedMessagesNotSeen, dayCounter } = user;
@@ -79,15 +84,6 @@ export default function Home() {
 
   return (
     <SafeAreaView>
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            refreshFriends();
-          }}
-        >
-          <Text>press here to refresh friends</Text>
-        </TouchableOpacity>
-      </View>
       <View className="py-4 bg-gray-dark ">
         {isFriendsReady ? (
           <View className="h-full w-full flex justify-center items-center">
@@ -99,20 +95,26 @@ export default function Home() {
               <Text className="text-white font-semibold text-xl  px-4 py-4">
                 friends
               </Text>
+              <TouchableOpacity
+                className="bg-white"
+                onPress={() => router.navigate("/tabs/home/displayPhoto")}
+              >
+                <Text className="text-black text-2xl">go to displayphotoo</Text>
+              </TouchableOpacity>
               <FlatList
                 className="flex-grow-0"
                 data={friends}
                 renderItem={({ item }) => (
                   <UserRow
                     user={{
-                      name: item,
-                      dayCounter: 10,
-                      sentMessagesNotSeen: 4,
-                      recievedMessagesNotSeen: 10,
+                      name: item.tag,
+                      dayCounter: item.streak,
+                      sentMessagesNotSeen: 10,
+                      recievedMessagesNotSeen: item.photos.length,
                     }}
                   />
                 )}
-                keyExtractor={(item) => item}
+                keyExtractor={(item) => item.tag}
               />
             </View>
           </View>
