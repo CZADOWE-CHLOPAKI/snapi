@@ -4,9 +4,7 @@ import { Image, View } from "react-native";
 
 const DisplayPhoto = () => {
   const { pictureFileLocation } = usePictureContext();
-  useEffect(() => {
-    console.log(pictureFileLocation);
-  }, [pictureFileLocation]);
+
   return (
     <View>
       {pictureFileLocation && (

@@ -13,7 +13,10 @@ const getNavigationOptions = (title: string): NativeStackNavigationOptions => ({
 export default function Layout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="home" options={getNavigationOptions("home") as any} />
+      <Stack.Screen
+        name="index"
+        options={getNavigationOptions("home") as any}
+      />
       <Stack.Screen
         name="displayPhoto"
         options={getNavigationOptions("displayPhoto") as any}

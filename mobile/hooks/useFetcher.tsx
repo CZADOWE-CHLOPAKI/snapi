@@ -16,7 +16,6 @@ export function useFetcher<T>(
   useFocusEffect(
     useCallback(() => {
       refresh();
-      console.log("focused");
     }, [])
   );
 
@@ -38,9 +37,9 @@ export function useFetcher<T>(
       if (params !== undefined) {
         full_url = `${BASE_URL}${url}?${params}`;
       }
-      console.log(full_url);
+      // console.log(full_url);
       const response = await fetch(full_url, options);
-      console.log("error below?");
+      // console.log("error below?");
       // console.log(await response.text());
 
       const newData = await response.json();

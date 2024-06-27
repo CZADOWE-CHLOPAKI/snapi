@@ -1,12 +1,12 @@
 import { BASE_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { SingleFriendType } from "@/types/friend";
-
-const getImageBlob = async (imageUri: string) => {
-  const response = await fetch(imageUri);
-  const blob = await response.blob();
-  return blob;
-};
+// const getImageBlob = async (imageUri: string) => {
+//   const response = await fetch(imageUri);
+//   const blob = await response.blob();
+//   return blob;
+// };
+import * as FileSystem from "expo-file-system";
 
 const _sendPhoto = async (
   token: string,
@@ -14,19 +14,24 @@ const _sendPhoto = async (
   friends: SingleFriendType[]
 ) => {
   const friendTags = friends.map((friend) => friend.tag);
-  const imgBody = new FormData();
-  imgBody.append("photo", await getImageBlob(uri));
-  imgBody.append("friends", JSON.stringify(friendTags));
-
-  fetch(`${BASE_URL}/photos`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-    body: imgBody,
+  const friendsTagsString = friendTags.join(",");
+  const base64 = await FileSystem.readAsStringAsync(uri, {
+    encoding: "base64",
   });
+
+  try {
+    const response = await fetch(`${BASE_URL}/photos`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      method: "POST",
+      body: JSON.stringify({ photo: base64, friends: friendsTagsString }),
+    });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const useSendPhoto = () => {

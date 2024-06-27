@@ -1,12 +1,11 @@
 from typing import Any
 
-from fastapi import APIRouter, UploadFile, HTTPException, Form
-from pydantic import BaseModel
-from sqlmodel import Field, SQLModel, select
-
 from app.api.deps import CurrentUser, SessionDep
 from app.interfaces.files import OnDiskImageStorage
-from app.models import Photo, UserPhoto, User
+from app.models import Photo, User, UserPhoto
+from fastapi import APIRouter, Form, HTTPException, UploadFile
+from pydantic import BaseModel
+from sqlmodel import Field, SQLModel, select
 
 router = APIRouter()
 
@@ -28,15 +27,10 @@ class CreatePhotoResponse(BaseModel):
 
 
 @router.post("/", response_model=None)
-def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: UploadFile, friends: str = Form()) -> Any:
+def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: UploadFile) -> Any:
     """
     Create new item.
     """
-
-    try:
-        friends = [f.strip() for f in friends.split(",")]
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid friends")
 
     # TODO transaction for creating the records
 
@@ -46,16 +40,6 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: Uploa
     photo_db = Photo(source=filename)
     session.add(photo_db)
     session.commit()
-
-    for friend in friends:
-        # TODO what to do in case of non existing friend?
-        # TODO check if the friend is already a friend, if not then dont create UserPhoto for this user
-        user_st = select(User).where(User.tag == friend)
-        user = session.exec(user_st).first()
-        if user is None:
-            raise HTTPException(status_code=400, detail="Invalid friend")
-        statement = UserPhoto(sender_id=current_user.id, recipient_id=user.id, photo_id=photo_db.id)
-        session.add(statement)
 
     session.commit()
 
