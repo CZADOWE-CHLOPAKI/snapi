@@ -1,4 +1,5 @@
 import { useFriends } from "@/hooks/useFriends";
+import { useLoadPictures } from "@/hooks/useLoadPictures";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
 import { router } from "expo-router";
@@ -14,7 +15,7 @@ import {
 
 export default function Home() {
   const { friends, isFriendsReady, refreshFriends } = useFriends();
-
+  useLoadPictures(friends);
   useEffect(() => {
     console.log(friends);
   }, []);

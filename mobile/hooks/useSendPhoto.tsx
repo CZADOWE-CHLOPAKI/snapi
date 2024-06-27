@@ -36,8 +36,8 @@ const _sendPhoto = async (
 export const useSendPhoto = () => {
   const { token } = useUserContext();
 
-  const sendPhoto = async (uri: string, friends: SingleFriendType[]) =>
-    await _sendPhoto(token, uri, friends);
+  const sendPhoto = (uri: string, friends: SingleFriendType[]) =>
+    _sendPhoto(token, uri, friends);
 
   return { sendPhoto };
 };

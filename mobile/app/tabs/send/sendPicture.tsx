@@ -43,8 +43,8 @@ const SendPicture = () => {
   const { friends } = useFriends();
   const { pictureFileLocation } = usePictureContext();
 
-  const onSend = async () => {
-    await sendPhoto(pictureFileLocation, selectedFriends);
+  const onSend = () => {
+    sendPhoto(pictureFileLocation, selectedFriends);
     router.replace("/");
   };
 
