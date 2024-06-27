@@ -22,6 +22,7 @@ class GetFriendPublic(BaseModel):
     tag: str
     photos: list[str]
     streak: int
+    unseen_by_friend: int
 
 
 class GetFriendsPublic(BaseModel):
@@ -55,7 +56,10 @@ def get_friends(
         photo_sources = []
         for photo in photos:
             photo_sources.append(photo.photo.source)
-        friends_filtered.append(GetFriendPublic(tag=friend_user.tag, photos=photo_sources, streak=friend.streak))
+
+        unseen_by_friend_statement = select(UserPhoto).where(UserPhoto.sender_id == friend_user.id).where(UserPhoto.recipient_id == current_user.id).where(UserPhoto.seen == False)
+        unseen_by_friend = len(session.exec(unseen_by_friend_statement).all())
+        friends_filtered.append(GetFriendPublic(tag=friend_user.tag, photos=photo_sources, streak=friend.streak, unseen_by_friend=unseen_by_friend))
 
     return GetFriendsPublic(friends=friends_filtered)
 
