@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, UploadFile, HTTPException
+from fastapi import APIRouter, UploadFile, HTTPException, Form
 from pydantic import BaseModel
 from sqlmodel import Field, SQLModel, select
 
@@ -28,7 +28,7 @@ class CreatePhotoResponse(BaseModel):
 
 
 @router.post("/", response_model=None)
-def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: UploadFile, friends: str) -> Any:
+def create_photo(*, session: SessionDep, current_user: CurrentUser, photo: UploadFile, friends: str = Form()) -> Any:
     """
     Create new item.
     """
