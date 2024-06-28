@@ -1,9 +1,9 @@
+import { usePictureContext } from "@/context/PictureContext";
 import { useFriends } from "@/hooks/useFriends";
-import { useLoadPictures } from "@/hooks/useLoadPictures";
+import { useFriendsWithPictures } from "@/hooks/useFriendsWithPictures";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -14,11 +14,14 @@ import {
 } from "react-native";
 
 export default function Home() {
-  const { friends, isFriendsReady, refreshFriends } = useFriends();
-  useLoadPictures(friends);
-  useEffect(() => {
-    console.log(friends);
-  }, []);
+  const { friends, isFriendsReady } = useFriends();
+  useFriendsWithPictures(friends);
+  const { setDisplayForFriendTag } = usePictureContext();
+
+  const onFriendPress = (friendTag: string) => {
+    router.navigate("/tabs/home/displayPhoto");
+    setDisplayForFriendTag(friendTag);
+  };
 
   const UserRow = ({ user }: { user: UserType }) => {
     const { name, recievedMessagesNotSeen, dayCounter } = user;
@@ -68,6 +71,7 @@ export default function Home() {
         className={clsx(
           "bg-gray-dark px-6 flex items-center flex-row w-full  justify-start py-2"
         )}
+        onPress={() => onFriendPress(name)}
       >
         <Text className="text-white text-lg mr-4">{name}</Text>
 
@@ -96,12 +100,7 @@ export default function Home() {
               <Text className="text-white font-semibold text-xl  px-4 py-4">
                 friends
               </Text>
-              <TouchableOpacity
-                className="bg-white"
-                onPress={() => router.navigate("/tabs/home/displayPhoto")}
-              >
-                <Text className="text-black text-2xl">go to displayphotoo</Text>
-              </TouchableOpacity>
+
               <FlatList
                 className="flex-grow-0"
                 data={friends}
