@@ -1,9 +1,9 @@
-from typing import Any
+from typing import Any, Sequence
 
-from sqlmodel import Session, select
+from sqlmodel import Session, select, or_
 
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate
+from app.models import User, UserCreate, UserUpdate, Friend
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -45,9 +45,25 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
     return db_user
 
 
-def get_friends(*, session: Session, user_id: int, q: str = None) -> list[User]:
-    statement = select(User).where(User.id != user_id)
-    if q:
-        statement = statement.where(User.tag.ilike(f"%{q}%"))
-    friends = session.exec(statement).all()
-    return list(friends)
+def get_user_friends(*, session: Session, user: User | int, accepted: bool | None = True) -> Sequence[Friend]:
+    user_id = user if isinstance(user, int) else user.id
+    statement = select(Friend).where(or_(Friend.user_1_id == user_id, Friend.user_2_id == user_id))
+    if accepted is not None:
+        statement = statement.where(Friend.accepted == accepted)
+    return session.exec(statement).all()
+
+
+def get_friendship(*, session: Session, user1: User | str, user2: User | str):
+    if isinstance(user1, str):
+        user1 = session.exec(select(User).where(User.tag == user1)).first()
+    if isinstance(user2, str):
+        user2 = session.exec(select(User).where(User.tag == user2)).first()
+
+    statement1 = select(Friend).where(Friend.user_1_id == user2.id).where(Friend.user_2_id == user1.id)
+    statement2 = select(Friend).where(Friend.user_2_id == user2.id).where(Friend.user_1_id == user1.id)
+
+    friendship = session.exec(statement1).first()
+    if not friendship:
+        friendship = session.exec(statement2).first()
+
+    return friendship

@@ -10,13 +10,6 @@ from app.models import Photo, UserPhoto, User
 
 router = APIRouter()
 
-# zdjecia
-# POST photos
-# GET photos (lista ID zdjec po czasie dodania)
-# GET photos/{id}
-
-
-# server side events?
 
 class CreatePhoto(BaseModel):
     friends: list[str]
