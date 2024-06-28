@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlmodel import func, select, or_
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message, User, Friend, UserPhoto
+from app.models import Message, User, Friend, UserPhoto
 
 router = APIRouter()
 

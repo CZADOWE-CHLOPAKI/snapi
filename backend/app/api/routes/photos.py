@@ -31,7 +31,7 @@ class CreatePhotoResponse(BaseModel):
 @router.post("/", response_model=None)
 def create_photo(*, session: SessionDep, current_user: CurrentUser, data: CreatePhoto) -> Any:
     """
-    Create new item.
+    Create new photo.
     """
 
     friends = data.friends
