@@ -51,13 +51,13 @@ def get_friends(
             statement = select(User).where(User.id == friend.user_1_id)
         friend_user = session.exec(statement).first()
         # get photos
-        statement = select(UserPhoto).where(UserPhoto.sender_id == friend_user.id).where(UserPhoto.recipient_id == current_user.id)
+        statement = select(UserPhoto).where(UserPhoto.sender_id == friend_user.id).where(UserPhoto.recipient_id == current_user.id).where(UserPhoto.seen == False)
         photos = session.exec(statement).all()
         photo_sources = []
         for photo in photos:
             photo_sources.append(photo.photo.source)
 
-        unseen_by_friend_statement = select(UserPhoto).where(UserPhoto.sender_id == friend_user.id).where(UserPhoto.recipient_id == current_user.id).where(UserPhoto.seen == False)
+        unseen_by_friend_statement = select(UserPhoto).where(UserPhoto.sender_id == current_user.id).where(UserPhoto.recipient_id == friend_user.id).where(UserPhoto.seen == False)
         unseen_by_friend = len(session.exec(unseen_by_friend_statement).all())
         friends_filtered.append(GetFriendPublic(tag=friend_user.tag, photos=photo_sources, streak=friend.streak, unseen_by_friend=unseen_by_friend))
 

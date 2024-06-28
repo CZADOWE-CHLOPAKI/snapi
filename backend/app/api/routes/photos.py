@@ -39,7 +39,10 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
     # TODO transaction for creating the records
 
     image_storage = OnDiskImageStorage()
-    filename = image_storage.save(photob64)
+    try:
+        filename = image_storage.save(photob64)
+    except OnDiskImageStorage.FileStorageException:
+        raise HTTPException(status_code=400, detail="Invalid image")
 
     photo_db = Photo(source=filename)
     session.add(photo_db)
@@ -58,3 +61,29 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
     session.commit()
 
     return CreatePhotoResponse(id=0, filename=filename)
+
+
+class AcknowledgePhoto(BaseModel):
+    photo_id: str
+
+
+@router.post("/acknowledge/{photo_id}", response_model=None)
+def acknowledge_photo(*, session: SessionDep, current_user: CurrentUser, photo_id: str) -> Any:
+    """
+    Acknowledge photo.
+    """
+    photo_st = select(Photo).where(Photo.source == photo_id)
+    photo = session.exec(photo_st).first()
+    if photo is None:
+        raise HTTPException(status_code=400, detail="Photo not found")
+
+    statement = select(UserPhoto).where(UserPhoto.recipient_id == current_user.id).where(UserPhoto.photo_id == photo.id)
+    user_photo = session.exec(statement).first()
+    if user_photo is None:
+        raise HTTPException(status_code=400, detail="Photo not found")
+
+    user_photo.seen = True
+    session.add(user_photo)
+    session.commit()
+
+    return AcknowledgePhoto(photo_id=photo_id)
