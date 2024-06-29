@@ -1,8 +1,9 @@
+import PendingFriendsList from "@/components/PendingFriendsList";
 import { useDiscoverFriends } from "@/hooks/useDiscoverFriends";
 import { usePendingFriends } from "@/hooks/usePendingFriends";
 // import { useSearchNewFriends } from "@/hooks/useSearchNewFriends";
 import { AntDesign } from "@expo/vector-icons";
-import { SafeAreaView, TextInput, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, TextInput, View } from "react-native";
 
 const Friends = () => {
   const { pendingFriends, isGettingPendingFriends, acceptFriendRequest } =
@@ -13,6 +14,7 @@ const Friends = () => {
     discoveredFriends,
     searchString,
     setSearchString,
+    inviteFriend,
   } = useDiscoverFriends();
 
   return (
@@ -33,7 +35,7 @@ const Friends = () => {
       </View>
       {searchString === "" ? (
         <View>
-          {/* {isGettingPendingFriends || !pendingFriends ? (
+          {isGettingPendingFriends || !pendingFriends ? (
             <View className="h-full w-full flex justify-center items-center">
               <ActivityIndicator color="white" className="pb-60" />
             </View>
@@ -41,27 +43,25 @@ const Friends = () => {
             <PendingFriendsList
               label={"friend invitations"}
               displayTrashCan={true}
-              friends={pendingFriends}
+              friends={pendingFriends as string[]}
               onPlusClick={(tag) => acceptFriendRequest(tag)}
             />
-          )} */}
+          )}
         </View>
       ) : (
         <View>
-          {/* {isDiscoverFriendsLoading || !discoveredFriends ? (
+          {isDiscoverFriendsLoading || !discoveredFriends ? (
             <View className="h-full w-full flex justify-center items-center">
               <ActivityIndicator color="white" className="pb-60" />
             </View>
           ) : (
             <PendingFriendsList
               friends={discoveredFriends}
-              onPlusClick={(tag) => {
-                console.log("add friend implement this is a mock");
-              }}
+              onPlusClick={(tag) => inviteFriend(tag)}
               label={"found friends"}
               displayTrashCan={false}
             />
-          )} */}
+          )}
         </View>
       )}
     </SafeAreaView>

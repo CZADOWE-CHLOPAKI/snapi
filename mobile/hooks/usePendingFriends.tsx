@@ -1,6 +1,5 @@
 import { BASE_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
-import { SingleFriendType } from "@/types/friend";
 import { useFetcher } from "./useFetcher";
 
 type PendingFriendType = {};
@@ -8,7 +7,7 @@ type PendingFriendType = {};
 export const usePendingFriends = () => {
   const { token } = useUserContext();
   const { data, isLoading, refresh } = useFetcher<{
-    friends: SingleFriendType[];
+    friends: string[];
   }>("/friends/pending", "GET", {});
 
   const acceptFriendRequest = async (tag: string) => {
@@ -21,6 +20,7 @@ export const usePendingFriends = () => {
       body: JSON.stringify({ friend: tag }),
     });
     const data = await response.json();
+    console.log("accept friend request response data:");
     console.log(data);
 
     refresh();

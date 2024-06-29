@@ -1,23 +1,24 @@
-import { PictureCounter } from "@/components/PictureCounter";
-import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { usePendingFriends } from "@/hooks/usePendingFriends";
+import { useEffect } from "react";
+import { Pressable, Text, View } from "react-native";
 
 const Test = () => {
-  const [currentPictureIndex, setCurrentPictureIndex] = useState(6);
+  const { pendingFriends } = usePendingFriends();
+
+  useEffect(() => {
+    console.log("pending friends chagne");
+    console.log(pendingFriends);
+  }, [pendingFriends]);
+
   return (
-    <View className="w-full h-full bg-gray-dark flex justify-center items-center  ">
-      <TouchableOpacity
+    <View className="w-full h-full bg-gray-dark justify-center items-center">
+      <Pressable
         onPress={() => {
-          console.log("dupa");
-          setCurrentPictureIndex(currentPictureIndex - 1);
+          console.log("press");
         }}
       >
-        <Text className="text-lg text-white">asdksd</Text>
-      </TouchableOpacity>
-
-      <View className="w-12 mt-20 h-12 flex justify-center items-center border-white  rounded-full ">
-        <PictureCounter currentPictureIndex={currentPictureIndex} count={6} />
-      </View>
+        <Text className="text-white text-lg">press</Text>
+      </Pressable>
     </View>
   );
 };

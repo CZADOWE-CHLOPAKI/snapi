@@ -27,6 +27,7 @@ const _sendPhoto = async (
       method: "POST",
       body: JSON.stringify({ photob64: base64, friends: friendTags }),
     });
+    console.log("send photo response");
     console.log(response);
   } catch (error) {
     console.log(error);
