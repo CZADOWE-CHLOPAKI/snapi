@@ -1,9 +1,8 @@
-import PendingFriendsList from "@/components/PendingFriendsList";
 import { useDiscoverFriends } from "@/hooks/useDiscoverFriends";
 import { usePendingFriends } from "@/hooks/usePendingFriends";
 // import { useSearchNewFriends } from "@/hooks/useSearchNewFriends";
 import { AntDesign } from "@expo/vector-icons";
-import { ActivityIndicator, SafeAreaView, TextInput, View } from "react-native";
+import { SafeAreaView, TextInput, View } from "react-native";
 
 const Friends = () => {
   const { pendingFriends, isGettingPendingFriends, acceptFriendRequest } =
@@ -34,7 +33,7 @@ const Friends = () => {
       </View>
       {searchString === "" ? (
         <View>
-          {isGettingPendingFriends ? (
+          {/* {isGettingPendingFriends || !pendingFriends ? (
             <View className="h-full w-full flex justify-center items-center">
               <ActivityIndicator color="white" className="pb-60" />
             </View>
@@ -45,24 +44,24 @@ const Friends = () => {
               friends={pendingFriends}
               onPlusClick={(tag) => acceptFriendRequest(tag)}
             />
-          )}
+          )} */}
         </View>
       ) : (
         <View>
-          {isDiscoverFriendsLoading ? (
+          {/* {isDiscoverFriendsLoading || !discoveredFriends ? (
             <View className="h-full w-full flex justify-center items-center">
               <ActivityIndicator color="white" className="pb-60" />
             </View>
           ) : (
             <PendingFriendsList
-              tags={discoveredFriends}
+              friends={discoveredFriends}
               onPlusClick={(tag) => {
                 console.log("add friend implement this is a mock");
               }}
               label={"found friends"}
               displayTrashCan={false}
             />
-          )}
+          )} */}
         </View>
       )}
     </SafeAreaView>

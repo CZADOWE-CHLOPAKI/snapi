@@ -36,12 +36,14 @@ const PendingFriendsList = ({
       <Text className="text-white font-semibold text-xl  px-4 py-4">
         {label}
       </Text>
-      <FlatList
-        className="flex-grow-0 "
-        data={friends}
-        renderItem={({ item }) => <UserRow tag={item.tag} />}
-        keyExtractor={(item) => item.tag}
-      />
+      {friends.length > 0 && (
+        <FlatList
+          className="flex-grow-0 "
+          data={friends}
+          renderItem={({ item }) => <UserRow tag={item?.tag} />}
+          keyExtractor={(item) => item.tag}
+        />
+      )}
     </View>
   );
 };
