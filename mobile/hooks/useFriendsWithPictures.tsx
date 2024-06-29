@@ -44,8 +44,8 @@ const downloadPictures = async (friends: SingleFriendType[]) => {
         const uri = download.uri;
         friendDownload.photos.push(uri);
       }
-      friendsWithUris.push(friendDownload);
     }
+    friendsWithUris.push(friendDownload);
   }
 
   return friendsWithUris;
@@ -61,11 +61,25 @@ export const useFriendsWithPictures = (initialFriends: SingleFriendType[]) => {
     setIsFriendsReady,
   } = usePictureContext();
 
+  const friendPictureCountChanged = (
+    prev: SingleFriendType[],
+    curr: SingleFriendType[]
+  ) =>
+    prev.map((friend) => `${friend.tag} ${friend.photos.length}`).join("|") !==
+    curr.map((friend) => `${friend.tag} ${friend.photos.length}`).join("|");
+
   useEffect(() => {
+    if (!initialFriends) return;
+    if (
+      friendsWithPictures &&
+      !friendPictureCountChanged(friendsWithPictures, initialFriends)
+    )
+      return;
+
     setIsFriendsReady(false);
     (async () => {
       const newFriendsWithPictures = await downloadPictures(initialFriends);
-      setFriendsWithPictures(newFriendsWithPictures);
+      setFriendsWithPictures([...newFriendsWithPictures]);
       setIsFriendsReady(true);
     })();
 

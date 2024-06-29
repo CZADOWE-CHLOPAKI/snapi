@@ -1,7 +1,7 @@
 import { BASE_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export function useFetcher<T>(
   url: string,
@@ -18,6 +18,10 @@ export function useFetcher<T>(
       refresh();
     }, [])
   );
+
+  // useEffect(() => {
+  //   refresh();
+  // }, []);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -51,10 +55,6 @@ export function useFetcher<T>(
       console.error(error);
     }
     setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    refresh();
   }, []);
 
   return { data, isLoading, refresh };

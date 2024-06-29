@@ -1,10 +1,12 @@
 import { usePictureContext } from "@/context/PictureContext";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Image, SafeAreaView, Text } from "react-native";
 type SinglePhotoProps = {
   uri: string;
 };
+
+const SECONDS_TO_DISPLAY_PHOTO = 5;
 
 const SinglePhoto = ({ uri }: SinglePhotoProps) => {
   return (
@@ -32,6 +34,21 @@ const DisplayPhoto = () => {
     }
     return [];
   }, [displayForFriendTag]);
+
+  useEffect(() => {
+    if (!isFriendsWithPicturesReady) return;
+    let prevTimeout: NodeJS.Timeout | null = null;
+    const changePhoto = () => {
+      if (friendPictureIdx === friendPictures.length - 1) return;
+      if (prevTimeout) clearTimeout(prevTimeout);
+
+      prevTimeout = setTimeout(() => {
+        setFriendPictureIdx((prevIdx) => prevIdx + 1);
+        changePhoto();
+      }, SECONDS_TO_DISPLAY_PHOTO * 1000);
+    };
+    changePhoto();
+  }, [displayForFriendTag, isFriendsWithPicturesReady]);
 
   if (!isFriendsWithPicturesReady) {
     return (
