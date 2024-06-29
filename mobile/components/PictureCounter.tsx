@@ -1,33 +1,38 @@
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Text, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-const Square = () => (
-  <View className="bg-white rounded-full w-5 h-5  rotate-45" />
-);
 
-const SINGLE_PICTURE_SHOW_TIME_MS = 5000;
 const RotatingSquare = ({
   angle,
-  rotate,
+  idx,
+  rotationDurationMs,
 }: {
   angle: number;
-  rotate: boolean;
+  idx: number;
+  rotationDurationMs: number;
 }) => {
-  const [rotated, setRotated] = useState(false);
+  const [previousIdx, setPreviousIdx] = useState(idx);
+  const rotate = useCallback(() => {
+    rotation.value = withTiming(rotation.value + 360, {
+      duration: rotationDurationMs,
+      easing: Easing.linear,
+    });
+    setPreviousIdx(idx);
+  }, []);
+
   useEffect(() => {
-    if (rotate && !rotated) {
-      rotation.value = withTiming(rotation.value + 360, {
-        duration: SINGLE_PICTURE_SHOW_TIME_MS,
-        easing: Easing.linear,
-      });
-      setRotated(true);
+    if (idx !== previousIdx) {
+      rotate();
     }
-  }, [rotate]);
+  }, [idx]);
+  useEffect(() => {
+    rotate();
+  }, []);
 
   const rotation = useSharedValue(angle);
   const animatedStyle = useAnimatedStyle(() => {
@@ -38,7 +43,14 @@ const RotatingSquare = ({
 
   return (
     <Animated.View className="w-8" style={animatedStyle}>
-      <Square />
+      <View className="bg-white w-5 h-5  flex flex-row justify-center items-center  rotate-45">
+        <Text
+          className="ml-1 mt-0.5 -rotate-45"
+          style={{ lineHeight: 18, fontSize: 18 }}
+        >
+          {idx}
+        </Text>
+      </View>
     </Animated.View>
   );
 };
@@ -46,10 +58,12 @@ const RotatingSquare = ({
 type PictureCounterProps = {
   currentPictureIndex: number;
   count: number;
+  secondsToDisplayPhoto: number;
 };
 export const PictureCounter = ({
   currentPictureIndex,
   count,
+  secondsToDisplayPhoto,
 }: PictureCounterProps) => {
   //   const turn = (idx: number) => {
   //     rotation.value = withTiming(rotation.value + 360, {
@@ -59,19 +73,23 @@ export const PictureCounter = ({
   //   };
 
   return (
-    <View className="w-12 h-12  flex justify-center items-center border-white absolute  rounded-full ">
-      {[...Array(count)].map((_, idx) => (
-        <View
-          className="absolute top-0"
-          key={idx}
-          style={{ display: idx > currentPictureIndex ? "none" : "flex" }}
-        >
-          <RotatingSquare
-            angle={45 * idx}
-            rotate={currentPictureIndex === idx}
-          />
-        </View>
-      ))}
+    <View className="w-12 h-12  flex justify-center items-center border-white absolute   ">
+      <View
+        className="absolute  top-0 left-0 flex justify-center items-center flex-row w-full "
+        // key={idx}
+        // style={{ display: idx > currentPictureIndex ? "none" : "flex" }}
+      >
+        <RotatingSquare
+          rotationDurationMs={secondsToDisplayPhoto * 1000}
+          angle={0}
+          idx={count - currentPictureIndex}
+        />
+      </View>
+      {/* <View className="absolute flex justify-center items-center flex-row top-0 left-0 w-full "> */}
+      {/* <Text className="pr-2 pt-0.5" style={{ lineHeight: 18, fontSize: 18 }}>
+          1
+        </Text> */}
+      {/* </View> */}
     </View>
   );
 };
