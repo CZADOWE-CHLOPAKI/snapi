@@ -1,5 +1,8 @@
+import { BASE_URL } from "@/api/apiSettings";
 import { PictureCounter } from "@/components/PictureCounter";
 import { usePictureContext } from "@/context/PictureContext";
+import { useUserContext } from "@/context/UserContext";
+import { useFriends } from "@/hooks/useFriends";
 import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Image, SafeAreaView, Text, View } from "react-native";
@@ -9,21 +12,24 @@ type SinglePhotoProps = {
 
 const SECONDS_TO_DISPLAY_PHOTO = 5;
 
-const SinglePhoto = ({ uri }: SinglePhotoProps) => {
-  return (
-    <SafeAreaView className="bg-gray-dark flex w-full h-full justify-center items-center">
-      <Image source={{ uri }} className="w-full h-full" />
-    </SafeAreaView>
-  );
-};
+const CONSUME_PHOTO = true;
+
+// const SinglePhoto = ({ uri }: SinglePhotoProps) => {
+//   return (
+//     <SafeAreaView className="bg-gray-dark flex w-full h-full justify-center items-center">
+//       <Image source={{ uri }} className="w-full h-full" />
+//     </SafeAreaView>
+//   );
+// };
 
 const DisplayPhoto = () => {
+  const { friends, refreshFriends } = useFriends();
   const {
     friendsWithPictures,
     displayForFriendTag,
     isFriendsWithPicturesReady,
   } = usePictureContext();
-
+  const { token } = useUserContext();
   const [friendPictureIdx, setFriendPictureIdx] = useState(0);
 
   const friendPictures = useMemo(() => {
@@ -36,26 +42,64 @@ const DisplayPhoto = () => {
     return [];
   }, [displayForFriendTag]);
 
+  const friendPicturesServerUri = useMemo(() => {
+    if (!friends) return [];
+    for (const friend of friends) {
+      console.log(friend, displayForFriendTag);
+      if (friend.tag === displayForFriendTag) {
+        return friend.photos;
+      }
+    }
+
+    return [];
+  }, [displayForFriendTag, friends]);
+
+  const viewPhoto = async (uri: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/photos/acknowledge/${uri}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log("view photo request response data:");
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    if (CONSUME_PHOTO) {
+      if (friendPictureIdx === 0) return;
+      viewPhoto(friendPicturesServerUri[friendPictureIdx - 1]);
+    }
+
+    if (friendPictureIdx === friendPictures.length) {
+      router.back();
+    }
+  }, [friendPictureIdx]);
+
   useEffect(() => {
     if (!isFriendsWithPicturesReady) return;
-    let prevTimeout: NodeJS.Timeout | null = null;
+    let timeout: NodeJS.Timeout | null = null;
     const changePhoto = () => {
-      if (friendPictureIdx === friendPictures.length - 1) return;
-      if (prevTimeout) clearTimeout(prevTimeout);
+      if (timeout) clearTimeout(timeout);
 
-      prevTimeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setFriendPictureIdx((prevIdx) => prevIdx + 1);
         changePhoto();
       }, SECONDS_TO_DISPLAY_PHOTO * 1000);
     };
     changePhoto();
+
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
   }, [displayForFriendTag, isFriendsWithPicturesReady]);
 
-  useEffect(() => {
-    if (friendPictureIdx === friendPictures.length) {
-      router.back();
-    }
-  }, [friendPictureIdx]);
+  useEffect(() => {}, [friendPictureIdx]);
 
   if (!isFriendsWithPicturesReady) {
     return (

@@ -1,7 +1,6 @@
 import PendingFriendsList from "@/components/PendingFriendsList";
 import { useDiscoverFriends } from "@/hooks/useDiscoverFriends";
 import { usePendingFriends } from "@/hooks/usePendingFriends";
-// import { useSearchNewFriends } from "@/hooks/useSearchNewFriends";
 import { AntDesign } from "@expo/vector-icons";
 import { ActivityIndicator, SafeAreaView, TextInput, View } from "react-native";
 

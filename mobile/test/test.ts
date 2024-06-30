@@ -1,55 +1,23 @@
-import fs from "fs";
-export const BASE_URL = "http://192.168.182.225:8888/api/v1";
+const HOST = "http://192.168.192.11";
+const BASE_URL = `${HOST}:8888/api/v1`;
 
-const getImageBlob = async (imageUri: string) => {
-  const response = await fetch(imageUri);
-  const blob = await response.blob();
-  return blob;
-};
-
-const _sendPhoto = async (token: string) => {
-  const readFile = fs.readFileSync(
-    "/Users/janczerwinski/projekty/snapi/mobile/test/image.jpeg"
-  );
-
-  const friendsTagsString = "maciek";
-  const imgBody = new FormData();
-  console.log("BLOB");
-  console.log(readFile);
-
-  //   imgBody.append("photo", new Blob([readFile]));
-  imgBody.append(
-    "photo",
-    JSON.stringify({
-      uri: "file:///Users/janczerwinski/projekty/snapi/mobile/test/image.jpeg",
-      name: "image.jpeg",
-      type: "image/jpeg",
-    })
-  );
-
-  imgBody.append("friends", friendsTagsString);
-
+const viewPhoto = async (uri: string) => {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAxMDM2MTYsInN1YiI6IjIifQ.Fx5fh1oXlHXEzL9ncrpJGb-zw9u_UwOO2GA5BdRJPIM";
   try {
-    console.log("friends tags string");
-    console.log(friendsTagsString);
-    const response = await fetch(`${BASE_URL}/photos`, {
+    const response = await fetch(`${BASE_URL}/photos/acknowledge/${uri}`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
-        // "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: imgBody,
     });
-    console.log("send picture");
-    console.log(response);
-    console.log(await response.json());
+    const data = await response.json();
+    console.log("view photo request response data:");
+    console.log(data);
   } catch (error) {
-    console.error("error ", error);
+    console.error(error);
   }
 };
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAxODI1MDcsInN1YiI6IjEifQ.HfIarng259iBb_0jXJpzB-IH4PIYycfTLdRygrsipLQ";
-
-_sendPhoto(token);
+viewPhoto("test");

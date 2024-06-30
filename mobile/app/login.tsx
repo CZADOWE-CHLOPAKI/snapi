@@ -67,7 +67,7 @@ const Login = () => {
         {error !== "" && <Text className="text-error">{error}</Text>}
         <TouchableOpacity
           onPress={() => router.navigate("/register")}
-          className="mt-4"
+          className="mt-4 text-center"
         >
           <Text className="text-white">Don't have an account? Register</Text>
         </TouchableOpacity>

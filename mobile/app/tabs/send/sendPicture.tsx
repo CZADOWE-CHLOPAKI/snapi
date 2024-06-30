@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import clsx from "clsx";
 import { router } from "expo-router";
 import { useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 type UserProps = {
   onSelected: () => void;
@@ -21,7 +21,7 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
   return (
     <TouchableOpacity
       className={clsx(
-        "bg-gray-dark px-4 h-12 flex items-center flex-row  justify-between mb-2",
+        "bg-gray-dark px-8 h-12 flex items-center flex-row  justify-between mb-2",
         selected && "bg-gray-medium"
       )}
       onPress={() => {
@@ -36,20 +36,22 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
 
 const SendPicture = () => {
   const { sendPhoto } = useSendPhoto();
+  const { friends, refreshFriends } = useFriends();
+  const { pictureFileLocation } = usePictureContext();
 
   const [selectedFriends, setSelectedFriends] = useState<SingleFriendType[]>(
     []
   );
-  const { friends } = useFriends();
-  const { pictureFileLocation } = usePictureContext();
 
-  const onSend = () => {
-    sendPhoto(pictureFileLocation, selectedFriends);
+  const onSend = async () => {
+    await sendPhoto(pictureFileLocation, selectedFriends);
+    await refreshFriends();
     router.replace("/");
   };
 
   return (
-    <View className="bg-gray-medium h-full flex justify-center pt-8 ">
+    <View className="bg-gray-dark h-full flex justify-center pt-8 ">
+      <Text className="text-xl text-white px-4 py-8">send to:</Text>
       <FlatList
         data={friends}
         renderItem={({ item }) => (

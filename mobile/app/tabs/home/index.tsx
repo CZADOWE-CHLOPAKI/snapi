@@ -1,6 +1,7 @@
 import { usePictureContext } from "@/context/PictureContext";
 import { useFriends } from "@/hooks/useFriends";
 import { useFriendsWithPictures } from "@/hooks/useFriendsWithPictures";
+import { SingleFriendType } from "@/types/friend";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import clsx from "clsx";
 import { router } from "expo-router";
@@ -19,12 +20,15 @@ export default function Home() {
   const { setDisplayForFriendTag } = usePictureContext();
 
   const onFriendPress = (friendTag: string) => {
+    const f = friends.find((friend) => friend.tag === friendTag);
+    if (f?.photos.length === 0) return;
     router.navigate("/tabs/home/displayPhoto");
     setDisplayForFriendTag(friendTag);
   };
 
-  const UserRow = ({ user }: { user: UserType }) => {
-    const { name, recievedMessagesNotSeen, dayCounter } = user;
+  const UserRow = ({ user }: { user: SingleFriendType }) => {
+    const { tag, streak, unseen_by_friend, photos } = user;
+    const recievedMessagesNotSeen = photos.length;
 
     const MessagesSentNotSeen = () => (
       <View className="flex items-center flex-row ml-auto">
@@ -32,13 +36,13 @@ export default function Home() {
           <Text
             className={clsx(
               "text-lg text-white",
-              recievedMessagesNotSeen === 0 && "text-gray-light"
+              unseen_by_friend === 0 && "text-gray-light"
             )}
           >
-            {recievedMessagesNotSeen}
+            {unseen_by_friend}
           </Text>
         </View>
-        {recievedMessagesNotSeen > 0 ? (
+        {unseen_by_friend > 0 ? (
           <AntDesign name="eyeo" size={24} color="white" />
         ) : (
           <AntDesign name="eyeo" size={24} color="#4d4d4d" />
@@ -71,17 +75,16 @@ export default function Home() {
         className={clsx(
           "bg-gray-dark px-6 flex items-center flex-row w-full  justify-start py-2"
         )}
-        onPress={() => onFriendPress(name)}
+        onPress={() => onFriendPress(tag)}
       >
-        <Text className="text-white text-lg mr-4">{name}</Text>
-
-        {dayCounter > 0 && (
+        <Text className="text-white text-lg mr-4">{tag}</Text>
+        {streak > 0 && (
           <View className="flex flex-row items-center justify-end mr-4">
-            <Text className="text-lg text-white  pr-2">{dayCounter}</Text>
+            <Text className="text-lg text-white  pr-2">{streak}</Text>
             <FontAwesome name="bolt" size={24} color="white" />
           </View>
         )}
-
+        <MessagesSentNotSeen />
         <MessagesRecievedNotSeenCount />
       </TouchableOpacity>
     );
@@ -104,16 +107,7 @@ export default function Home() {
               <FlatList
                 className="flex-grow-0"
                 data={friends}
-                renderItem={({ item }) => (
-                  <UserRow
-                    user={{
-                      name: item.tag,
-                      dayCounter: item.streak,
-                      sentMessagesNotSeen: 10,
-                      recievedMessagesNotSeen: item.photos.length,
-                    }}
-                  />
-                )}
+                renderItem={({ item }) => <UserRow user={item} />}
                 keyExtractor={(item) => item.tag}
               />
             </View>
