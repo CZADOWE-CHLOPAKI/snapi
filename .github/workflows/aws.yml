@@ -63,4 +63,4 @@ jobs:
         ECR_IMAGE_TAG: ${{ env.ECR_IMAGE_TAG }}           # set this to your Amazon ECR repository name
       run: |
         cd backend
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG"
