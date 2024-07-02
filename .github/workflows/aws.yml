@@ -35,7 +35,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  push-backend-image:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
@@ -57,15 +57,15 @@ jobs:
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
+      env:
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
+        ECR_REGISTRY: ${{ env.ECR_REGISTRY }}           # set this to your Amazon ECR repository name
+        ECR_IMAGE_TAG: ${{ env.ECR_IMAGE_TAG }}           # set this to your Amazon ECR repository name
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
         cd backend
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
-      env:
-        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
-        ECR_REGISTRY: ${{ env.ECR_REGISTRY }}           # set this to your Amazon ECR repository name
-        ECR_IMAGE_TAG: ${{ env.ECR_IMAGE_TAG }}           # set this to your Amazon ECR repository name
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG" >> $GITHUB_OUTPUT
