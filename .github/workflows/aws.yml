@@ -58,9 +58,9 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
-        ECR_REGISTRY: ${{ env.ECR_REGISTRY }}           # set this to your Amazon ECR repository name
-        ECR_IMAGE_TAG: ${{ env.ECR_IMAGE_TAG }}           # set this to your Amazon ECR repository name
+        ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
+        ECR_REGISTRY: ${{ vars.ECR_REGISTRY }}           # set this to your Amazon ECR repository name
+        ECR_IMAGE_TAG: ${{ vars.ECR_IMAGE_TAG }}           # set this to your Amazon ECR repository name
       run: |
         cd backend
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG"
