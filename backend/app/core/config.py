@@ -1,4 +1,6 @@
+import json
 import secrets
+import urllib.parse
 import warnings
 from typing import Annotated, Any, Literal
 
@@ -46,21 +48,31 @@ class Settings(BaseSettings):
         list[AnyUrl] | str, BeforeValidator(parse_cors)
     ] = []
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "Yapper API"
     SENTRY_DSN: HttpUrl | None = None
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
+    POSTGRES_USER: str | None = None
+    POSTGRES_PASSWORD: str | None = None
     POSTGRES_DB: str = ""
+    POSTGRES_JSON_CREDENTIALS: str | None = None
 
     @computed_field  # type: ignore[misc]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
+        pg_user = self.POSTGRES_USER
+        pg_password = self.POSTGRES_PASSWORD
+        if self.POSTGRES_JSON_CREDENTIALS:
+            credentials = json.loads(self.POSTGRES_JSON_CREDENTIALS)
+            pg_user = credentials["username"]
+            pg_password = credentials["password"]
+
+        # password needs to be url encoded, but the user doesn't for some reason
+        pg_password = urllib.parse.quote_plus(pg_password)
         return MultiHostUrl.build(
             scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
+            username=pg_user,
+            password=pg_password,
             host=self.POSTGRES_SERVER,
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
