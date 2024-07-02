@@ -68,4 +68,4 @@ jobs:
       env:
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
         ECR_REGISTRY: ${{ env.ECR_REGISTRY }}           # set this to your Amazon ECR repository name
-        IMAGE_TAG: ${{ env.IMAGE_TAG }}           # set this to your Amazon ECR repository name
+        ECR_IMAGE_TAG: ${{ env.IMAGE_TAG }}           # set this to your Amazon ECR repository name
