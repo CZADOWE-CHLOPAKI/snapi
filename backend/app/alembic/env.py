@@ -1,4 +1,6 @@
+import json
 import os
+import urllib.parse
 from logging.config import fileConfig
 
 from alembic import context
@@ -31,6 +33,13 @@ target_metadata = SQLModel.metadata
 def get_url():
     user = os.getenv("POSTGRES_USER", "postgres")
     password = os.getenv("POSTGRES_PASSWORD", "")
+    json_settings = os.getenv("POSTGRES_JSON_CREDENTIALS", None)
+    if json_settings:
+        credentials = json.loads(json_settings)
+        user = credentials["username"]
+        password = credentials["password"]
+
+    password = urllib.parse.quote_plus(password)
     server = os.getenv("POSTGRES_SERVER", "db")
     port = os.getenv("POSTGRES_PORT", "5432")
     db = os.getenv("POSTGRES_DB", "app")
