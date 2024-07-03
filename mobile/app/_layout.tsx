@@ -23,6 +23,10 @@ export default function RootLayout() {
             options={getNavigationOptions("test") as any}
           />
           <Stack.Screen
+            name="test_gl"
+            options={getNavigationOptions("test") as any}
+          />
+          <Stack.Screen
             name="login"
             options={getNavigationOptions("login") as any}
           />

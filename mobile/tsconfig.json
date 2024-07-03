@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/test.tsx"  ]
+, "app/test.tsx", "app/test_gl.tsx"  ]
 }

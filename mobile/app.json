@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "just-camera-app",
+    "name": "blinky",
     "slug": "snapy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.janczerwinski.just-camera-app"
+      "bundleIdentifier": "com.janczerwinski.blinky"
     },
     "android": {
       "adaptiveIcon": {

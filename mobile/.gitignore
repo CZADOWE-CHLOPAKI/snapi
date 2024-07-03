@@ -18,3 +18,5 @@ firebase_service_account.json
 
 expo-env.d.ts
 # @end expo-cli
+
+/android
