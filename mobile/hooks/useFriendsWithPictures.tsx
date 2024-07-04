@@ -1,6 +1,7 @@
 import { PICTURE_URL } from "@/api/apiSettings";
 import { usePictureContext } from "@/context/PictureContext";
 import { SingleFriendType } from "@/types/friend";
+import { showToast } from "@/utils/showToast";
 import * as Crypto from "expo-crypto";
 import * as FileSystem from "expo-file-system";
 import { useEffect } from "react";
@@ -28,6 +29,7 @@ const downloadPictures = async (friends: SingleFriendType[]) => {
       streak: friend.streak,
       tag: friend.tag,
       photos: [],
+      unseen_by_friend: friend.unseen_by_friend,
     };
 
     for (const photo of friend.photos) {
@@ -38,6 +40,7 @@ const downloadPictures = async (friends: SingleFriendType[]) => {
         download = await downloadResumable.downloadAsync();
       } catch (e) {
         console.error(e);
+        showToast("Error downloading photos", "bad");
       }
 
       if (download) {

@@ -3,6 +3,7 @@ import { PictureCounter } from "@/components/PictureCounter";
 import { usePictureContext } from "@/context/PictureContext";
 import { useUserContext } from "@/context/UserContext";
 import { useFriends } from "@/hooks/useFriends";
+import { showToast } from "@/utils/showToast";
 import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Image, SafeAreaView, Text, View } from "react-native";

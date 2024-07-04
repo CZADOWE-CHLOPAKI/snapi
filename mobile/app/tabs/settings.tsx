@@ -1,5 +1,6 @@
 import { useUserContext } from "@/context/UserContext";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { showToast } from "@/utils/showToast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
@@ -20,6 +21,7 @@ const shareText = async (tag: string) => {
     });
   } catch (error) {
     console.error("Error sharing:", error);
+    showToast("Error sharing tag. Please try again.", "bad");
   }
 };
 

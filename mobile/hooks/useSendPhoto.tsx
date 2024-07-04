@@ -1,6 +1,7 @@
 import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { SingleFriendType } from "@/types/friend";
+import { showToast } from "@/utils/showToast";
 // const getImageBlob = async (imageUri: string) => {
 //   const response = await fetch(imageUri);
 //   const blob = await response.blob();
@@ -31,6 +32,7 @@ const _sendPhoto = async (
     console.log(response);
   } catch (error) {
     console.log(error);
+    showToast("Error sending photo", "bad");
   }
 };
 
