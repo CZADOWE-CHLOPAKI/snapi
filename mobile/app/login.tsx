@@ -1,10 +1,12 @@
 import { loginToBackend } from "@/api/authApi";
+import { AppleAuth } from "@/components/AppleAuth";
 import { PageLayout } from "@/components/PageLayout";
 import { useUserContext } from "@/context/UserContext";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
+  Platform,
   Text,
   TextInput,
   TouchableOpacity,
@@ -66,6 +68,7 @@ const Login = () => {
           >
             <Text className="text-white text-center">Submit</Text>
           </TouchableOpacity>
+          {Platform.OS === "ios" && <AppleAuth />}
           {error !== "" && <Text className="text-error">{error}</Text>}
           <TouchableOpacity
             onPress={() => router.navigate("/register")}
