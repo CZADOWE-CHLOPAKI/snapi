@@ -1,3 +1,4 @@
+import { SpinnerPage } from "@/components/SpinnerPage";
 import { ThemedText } from "@/components/ThemedText";
 import { usePictureContext } from "@/context/PictureContext";
 import { useFriends } from "@/hooks/useFriends";
@@ -38,17 +39,21 @@ const SendPicture = () => {
   const { sendPhoto } = useSendPhoto();
   const { friends, refreshFriends } = useFriends();
   const { pictureFileLocation } = usePictureContext();
+  const [pictureSent, setPictureSent] = useState(false);
+  const [onSendPressed, setOnSendPressed] = useState(false);
 
   const [selectedFriends, setSelectedFriends] = useState<SingleFriendType[]>(
     []
   );
 
   const onSend = async () => {
+    setOnSendPressed(true);
     await sendPhoto(pictureFileLocation, selectedFriends);
     await refreshFriends();
+    setPictureSent(true);
     router.replace("/");
   };
-
+  if (!pictureSent && onSendPressed) return <SpinnerPage />;
   return (
     <View className="bg-gray-dark h-full flex justify-center pt-8 ">
       <Text className="text-xl text-white px-4 py-8">send to:</Text>

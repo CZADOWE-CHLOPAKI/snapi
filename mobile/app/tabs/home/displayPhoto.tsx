@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/api/apiSettings";
+import { BASE_API_URL } from "@/api/apiSettings";
 import { PictureCounter } from "@/components/PictureCounter";
 import { usePictureContext } from "@/context/PictureContext";
 import { useUserContext } from "@/context/UserContext";
@@ -56,13 +56,16 @@ const DisplayPhoto = () => {
 
   const viewPhoto = async (uri: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/photos/acknowledge/${uri}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${BASE_API_URL}/photos/acknowledge/${uri}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await response.json();
       console.log("view photo request response data:");
       console.log(data);

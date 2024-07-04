@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/api/apiSettings";
+import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { SingleFriendType } from "@/types/friend";
 // const getImageBlob = async (imageUri: string) => {
@@ -19,7 +19,7 @@ const _sendPhoto = async (
   });
 
   try {
-    const response = await fetch(`${BASE_URL}/photos`, {
+    const response = await fetch(`${BASE_API_URL}/photos`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

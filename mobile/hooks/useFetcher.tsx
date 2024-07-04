@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/api/apiSettings";
+import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
@@ -37,9 +37,9 @@ export function useFetcher<T>(
     }
 
     try {
-      let full_url = `${BASE_URL}${url}`;
+      let full_url = `${BASE_API_URL}${url}`;
       if (params !== undefined) {
-        full_url = `${BASE_URL}${url}?${params}`;
+        full_url = `${BASE_API_URL}${url}?${params}`;
       }
       // console.log(full_url);
       const response = await fetch(full_url, options);
@@ -47,9 +47,6 @@ export function useFetcher<T>(
       // console.log(await response.text());
 
       const newData = await response.json();
-      // console.log("newData");
-      // console.log(newData);
-
       setData(newData);
     } catch (error) {
       console.error(error);

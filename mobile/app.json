@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "blinky",
+    "name": "yapper",
     "slug": "snapy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.janczerwinski.blinky"
+      "bundleIdentifier": "com.janczerwinski.yapper"
     },
     "android": {
       "adaptiveIcon": {

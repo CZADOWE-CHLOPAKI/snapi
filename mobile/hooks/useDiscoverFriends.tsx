@@ -1,20 +1,18 @@
+import { useUserContext } from "@/context/UserContext";
 import { useFetcher } from "@/hooks/useFetcher";
 import { useState } from "react";
-
+import { useFetch } from "./useFetch";
 export const useDiscoverFriends = () => {
   const [searchString, setSearchString] = useState("");
   // TODO: Implement search string
-
+  const { token } = useUserContext();
   const { data, isLoading, refresh } = useFetcher<{
     friends: string[];
   }>("/friends/discover", "GET", undefined, "q=" + searchString);
+  const { fetchPost } = useFetch();
 
   const inviteFriend = async (tag: string) => {
-    const response = await fetch(`/friends/invite/${tag}`, {
-      method: "POST",
-    });
-    console.log("inviteFriend response");
-    console.log(response);
+    await fetchPost(`/friends/invite/${tag}`, {});
   };
 
   return {

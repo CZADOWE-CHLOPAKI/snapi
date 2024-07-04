@@ -1,4 +1,4 @@
-import { BASE_URL } from "./apiSettings";
+import { BASE_API_URL } from "./apiSettings";
 
 export const loginToBackend = async (email: string, password: string) => {
   // Instead of using FormData, directly use URLSearchParams with the data
@@ -9,7 +9,7 @@ export const loginToBackend = async (email: string, password: string) => {
   let data;
 
   try {
-    const response = await fetch(`${BASE_URL}/login/access-token`, {
+    const response = await fetch(`${BASE_API_URL}/login/access-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -34,7 +34,7 @@ export const registerToBackend = async (
   password: string,
   tag: string
 ) => {
-  const response = await fetch(`${BASE_URL}/users/signup`, {
+  const response = await fetch(`${BASE_API_URL}/users/signup`, {
     headers: {
       "Content-Type": "application/json",
     },

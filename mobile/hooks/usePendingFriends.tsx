@@ -1,5 +1,6 @@
-import { BASE_URL } from "@/api/apiSettings";
+import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
+import { useFetch } from "./useFetch";
 import { useFetcher } from "./useFetcher";
 
 type PendingFriendType = {};
@@ -10,16 +11,24 @@ export const usePendingFriends = () => {
     friends: string[];
   }>("/friends/pending", "GET", {});
 
+  const { fetchPost } = useFetch();
+
   const acceptFriendRequest = async (tag: string) => {
-    const response = await fetch(`${BASE_URL}/friends/pending/accept/${tag}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ friend: tag }),
+    const data = await fetchPost(`/friends/pending/accept/${tag}`, {
+      friend: tag,
     });
-    const data = await response.json();
+    // const response = await fetch(
+    //   `${BASE_API_URL}/friends/pending/accept/${tag}`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     body: JSON.stringify({ friend: tag }),
+    //   }
+    // );
+    // const data = await response.json();
     console.log("accept friend request response data:");
     console.log(data);
 
