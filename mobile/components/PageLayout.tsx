@@ -1,8 +1,17 @@
 import { ReactNode } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 
-export const PageLayout = ({ children }: { children: ReactNode }) => {
+type PageLayoutProps = {
+  children: ReactNode;
+  header?: string;
+};
+export const PageLayout = ({ children, header }: PageLayoutProps) => {
   return (
-    <SafeAreaView className="h-full bg-gray-dark ">{children}</SafeAreaView>
+    <SafeAreaView className="h-full bg-gray-dark ">
+      {header && (
+        <Text className="text-white text-4xl m-12 mb-4">{header}</Text>
+      )}
+      {children}
+    </SafeAreaView>
   );
 };
