@@ -26,7 +26,7 @@ variable "vpc_cidr_block" {
 variable "instance_type" {
     description = "Instance type for the EC2 instance"
     type        = string
-    default     = "t3.micro"
+    default     = "t3.small"
 }
 
 variable "commit_sha1" {
@@ -98,7 +98,7 @@ variable "memory_target_tracking_desired_value" {
 variable "autoscaling_max_size" {
     description = "Maximum size of the autoscaling group"
     type        = number
-    default     = 3
+    default     = 2
 }
 
 variable "autoscaling_min_size" {

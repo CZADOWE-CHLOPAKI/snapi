@@ -58,6 +58,8 @@ resource "aws_ecs_task_definition" "default" {
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn      = aws_iam_role.ecs_task_iam_role.arn
 #  network_mode = "awsvpc"
+  depends_on = [aws_efs_file_system.photos]
+
   volume {
     name = "photos-volume-efs"
 

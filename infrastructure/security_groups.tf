@@ -34,6 +34,31 @@ resource "aws_security_group" "ec2" {
   }
 }
 
+resource "aws_security_group" "efs_photos" {
+  name       = "${var.namespace}_EFS_Photos_SecurityGroup_${var.environment}"
+  vpc_id     = aws_vpc.default.id
+
+  ingress {
+    description     = "Allow ingress traffic from EC2 instances"
+    from_port       = 2049
+    to_port         = 2049
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2.id]
+  }
+
+  egress {
+    description = "Allow all egress traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+      Name     = "${var.namespace}_EFS_Photos_SecurityGroup_${var.environment}"
+  }
+}
+
 ## SG for ALB
 
 resource "aws_security_group" "alb" {
