@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 from fastapi import APIRouter, UploadFile, HTTPException, Form
@@ -9,6 +10,8 @@ from app.interfaces.files import OnDiskImageStorage
 from app.models import Photo, UserPhoto, User
 
 router = APIRouter()
+
+logger = logging.getLogger(__name__)
 
 
 class CreatePhoto(BaseModel):
@@ -36,6 +39,9 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
         filename = image_storage.save(photob64)
     except OnDiskImageStorage.FileStorageException:
         raise HTTPException(status_code=400, detail="Invalid image")
+    except Exception as e:
+        logger.exception('Unexpected error while saving image')
+        raise HTTPException(status_code=400, detail="Unexpected error while saving image")
 
     photo_db = Photo(source=filename)
     session.add(photo_db)
