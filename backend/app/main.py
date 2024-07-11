@@ -1,4 +1,5 @@
 import logging
+from logging.config import dictConfig as loggingDictConfig
 
 import sentry_sdk
 from fastapi import FastAPI
@@ -7,11 +8,13 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.api.main_router import api_router
-from app.core.config import settings
-
+from app.core.config import settings, LogConfig
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+
+loggingDictConfig(LogConfig().dict())
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
