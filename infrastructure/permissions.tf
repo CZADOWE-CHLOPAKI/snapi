@@ -83,6 +83,27 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   assume_role_policy = data.aws_iam_policy_document.task_assume_role_policy.json
 }
 
+resource "aws_iam_policy" "ecs_task_execution_role_secrets_policy" {
+  name   = "${var.namespace}_ECS_TaskExecutionRoleSecretsPolicy_${var.environment}"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "secretsmanager:GetSecretValue",
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_secrets_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.ecs_task_execution_role_secrets_policy.arn
+}
+
 data "aws_iam_policy_document" "task_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]

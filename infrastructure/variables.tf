@@ -17,6 +17,12 @@ variable "az_count" {
   default     = 2
 }
 
+variable "container_backend_port" {
+  description = "Port of backend containers"
+  type        = number
+  default     = 8080
+}
+
 variable "vpc_cidr_block" {
     description = "CIDR block for the VPC"
     type        = string
@@ -74,7 +80,7 @@ variable "target_capacity" {
 variable "ecs_task_max_count" {
     description = "Maximum number of ECS tasks"
     type        = number
-    default     = 3
+    default     = 2
 }
 
 variable "ecs_task_min_count" {
@@ -86,13 +92,13 @@ variable "ecs_task_min_count" {
 variable "cpu_target_tracking_desired_value" {
     description = "CPU target tracking desired value"
     type        = number
-    default     = 80
+    default     = 50
 }
 
 variable "memory_target_tracking_desired_value" {
     description = "Memory target tracking desired value"
     type        = number
-    default     = 80
+    default     = 50
 }
 
 variable "autoscaling_max_size" {
@@ -122,17 +128,17 @@ variable "domain_name" {
 variable "ecs_task_desired_count" {
     description = "Desired number of ECS tasks"
     type        = number
-    default     = 2
+    default     = 1
 }
 
 variable "ecs_task_deployment_minimum_healthy_percent"{
     description = "Minimum healthy percent for ECS task deployment"
     type        = number
-    default     = 50
+    default     = 0
 }
 
 variable "ecs_task_deployment_maximum_percent" {
     description = "Maximum percent for ECS task deployment"
     type        = number
-    default     = 200
+    default     = 100
 }

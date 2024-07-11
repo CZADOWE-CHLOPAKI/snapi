@@ -22,11 +22,10 @@ resource "aws_ecs_service" "service" {
   deployment_minimum_healthy_percent = var.ecs_task_deployment_minimum_healthy_percent
   deployment_maximum_percent         = var.ecs_task_deployment_maximum_percent
 
-  # TODO make that load balancer terminate ssl
   load_balancer {
     target_group_arn = aws_alb_target_group.service_target_group.arn
     container_name   = var.backend_service_name
-    container_port   = 80
+    container_port   = var.container_backend_port
   }
 
   ## Spread tasks evenly accross all Availability Zones for High Availability
@@ -75,13 +74,13 @@ resource "aws_ecs_task_definition" "default" {
       name      = var.backend_service_name
       image     = "${aws_ecr_repository.yapper_backend.repository_url}:${var.commit_sha1}"
       cpu       = 512
-      memoryReservation = 1024
+      memoryReservation = 512
       memory    = 2048
       essential = true
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = var.container_backend_port
+          hostPort      = 0
           name          = "web"
           appProtocol   = "http"
         }
@@ -89,7 +88,8 @@ resource "aws_ecs_task_definition" "default" {
       mountPoints = [
           {
               "containerPath": "/photos",
-              "sourceVolume": "photos-volume-efs"
+              "sourceVolume": "photos-volume-efs",
+              "readOnly": false
           }
       ]
       logConfiguration = {
@@ -118,16 +118,22 @@ resource "aws_ecs_task_definition" "default" {
           value = "app"
         },
         {
-          name  = "POSTGRES_JSON_CREDENTIALS"
-          value = "tutaj arn"
-        },
-        {
           name  = "POSTGRES_SERVER"
-          value = "TODO tutaj url do bazy"
+          value = aws_db_instance.main.address
         },
         {
           name  = "USERS_OPEN_REGISTRATION"
           value = "True"
+        },
+        {
+          name  = "PORT"
+          value = tostring(var.container_backend_port)
+        }
+      ]
+      secrets = [
+        {
+          name      = "POSTGRES_JSON_CREDENTIALS"
+          valueFrom = aws_db_instance.main.master_user_secret[0].secret_arn
         }
       ]
     }

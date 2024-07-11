@@ -37,9 +37,12 @@ resource "aws_alb_listener_rule" "https_listener_rule" {
   }
 
   condition {
-    host_header {
-      values = ["${var.environment}.${var.domain_name}"]
+    source_ip {
+      values = ["0.0.0.0/0"]
     }
+#    host_header {
+#      values = ["${var.environment}.${var.domain_name}"]
+#    }
   }
 
 #  condition {
