@@ -26,8 +26,7 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.janczerwinski.snapy",
-      "googleServicesFile": "./firebase_service_account.json"
+      "package": "com.janczerwinski.snapy"
     },
     "web": {
       "bundler": "metro",
