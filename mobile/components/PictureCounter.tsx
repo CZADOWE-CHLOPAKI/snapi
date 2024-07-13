@@ -42,16 +42,16 @@ const RotatingSquare = ({
   });
 
   return (
-    <Animated.View className="w-8" style={animatedStyle}>
-      <View className="bg-white w-5 h-5  flex flex-row justify-center items-center  rotate-45">
-        <Text
-          className="ml-1 mt-0.5 -rotate-45"
-          style={{ lineHeight: 18, fontSize: 18 }}
-        >
-          {idx}
-        </Text>
+    <View className="relative">
+      <Animated.View className="w-8 h-8 absolute" style={animatedStyle}>
+        <View className="bg-gray-dark border-white border w-full h-full  flex flex-row justify-center items-center  rotate-45">
+          <View className="bg-white w-2 h-2 absolute  top-0 left-0" />
+        </View>
+      </Animated.View>
+      <View className="w-8 absolute h-8 flex justify-center items-center">
+        <Text className="text-white text-xl  leading-none ">{idx}</Text>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -74,22 +74,13 @@ export const PictureCounter = ({
 
   return (
     <View className="w-12 h-12  flex justify-center items-center border-white absolute   ">
-      <View
-        className="absolute  top-0 left-0 flex justify-center items-center flex-row w-full "
-        // key={idx}
-        // style={{ display: idx > currentPictureIndex ? "none" : "flex" }}
-      >
+      <View className="absolute  flex justify-center items-center flex-row w-full ">
         <RotatingSquare
           rotationDurationMs={secondsToDisplayPhoto * 1000}
           angle={0}
           idx={count - currentPictureIndex}
         />
       </View>
-      {/* <View className="absolute flex justify-center items-center flex-row top-0 left-0 w-full "> */}
-      {/* <Text className="pr-2 pt-0.5" style={{ lineHeight: 18, fontSize: 18 }}>
-          1
-        </Text> */}
-      {/* </View> */}
     </View>
   );
 };
