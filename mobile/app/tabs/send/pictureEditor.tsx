@@ -2,18 +2,30 @@ import { Canvas, Image, useImage } from "@shopify/react-native-skia";
 import { router } from "expo-router";
 import { Dimensions } from "react-native";
 
+import { CropHandler } from "@/components/pictureEditor/CropHandler";
 import { usePictureContext } from "@/context/PictureContext";
 import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
+import React, { useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 type PictureEditorUiProps = {
   onSend: () => void;
   onCropPress: () => void;
+  isEditing: boolean;
+  onAcceptEdit: () => void;
 };
 
-const PictureEditorUi = ({ onSend, onCropPress }: PictureEditorUiProps) => {
+const PictureEditorUi = ({
+  onSend,
+  onCropPress,
+  isEditing,
+  onAcceptEdit,
+}: PictureEditorUiProps) => {
   return (
-    <View className="w-full h-full absolute z-10">
+    <View
+      className="w-full h-full absolute z-20 "
+      style={{ pointerEvents: "box-none" }}
+    >
       <View className="flex flex-row w-full absolute py-10 px-4 justify-end ">
         <TouchableOpacity
           onPress={onCropPress}
@@ -30,8 +42,15 @@ const PictureEditorUi = ({ onSend, onCropPress }: PictureEditorUiProps) => {
         </TouchableOpacity>
       </View>
       <View className="flex h-full  w-full items-end justify-end py-4 px-6 ">
-        <TouchableOpacity className="p-6" onPress={onSend}>
-          <FontAwesome name="send-o" size={38} color="white" />
+        <TouchableOpacity
+          className=""
+          onPress={() => (isEditing ? onAcceptEdit() : onSend())}
+        >
+          {isEditing ? (
+            <FontAwesome name="check" size={32} color="white" />
+          ) : (
+            <FontAwesome name="send-o" size={32} color="white" />
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -44,6 +63,8 @@ const PictureEditor = () => {
   };
   const { pictureFileLocation } = usePictureContext();
   const image = useImage(pictureFileLocation);
+  const [isCropping, setIsCropping] = useState(false);
+  const isEditing = useMemo(() => isCropping, [isCropping]);
 
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
@@ -51,16 +72,25 @@ const PictureEditor = () => {
   const r = width * 0.33;
 
   const onCropPress = () => {
-    console.log("CROP");
+    setIsCropping((prev) => !prev);
   };
+
+  const onAcceptEdit = () => setIsCropping(false);
 
   return (
     <View className="w-full h-full">
       <View
-        className="absolute  top-0 left-0 w-full h-full flex justify-between  z-20"
+        className="absolute  top-0 left-0 w-full h-full flex justify-between "
         style={{ pointerEvents: "box-none" }}
       >
-        <PictureEditorUi onSend={onSend} onCropPress={onCropPress} />
+        <PictureEditorUi
+          onSend={onSend}
+          onCropPress={onCropPress}
+          isEditing={isEditing}
+          onAcceptEdit={onAcceptEdit}
+        />
+        {isCropping && <CropHandler />}
+
         <View className="absolute top-0 ">
           <Canvas style={{ width, height }}>
             <Image
