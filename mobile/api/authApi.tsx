@@ -41,6 +41,7 @@ export const registerToBackend = async (
     method: "POST",
     body: JSON.stringify({ email, password, tag }),
   });
+  console.log(response);
 
   return { ok: response.ok, statusText: response.statusText };
 };

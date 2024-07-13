@@ -21,11 +21,12 @@ const Register = () => {
     }
 
     // Call the registerToBackend function
-    const { ok } = await registerToBackend(email, password, tag);
+    const { ok, statusText } = await registerToBackend(email, password, tag);
 
     if (ok) {
       router.replace("login");
     } else {
+      console.error(statusText);
       // Handle error
     }
   };

@@ -5,7 +5,7 @@ import { useFriends } from "@/hooks/useFriends";
 import { useSendPhoto } from "@/hooks/useSendPhoto";
 import { SingleFriendType } from "@/types/friend";
 
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 import clsx from "clsx";
 import { router } from "expo-router";
@@ -78,10 +78,10 @@ const SendPicture = () => {
       <View className="px-6 py-8 flex flex-row justify-end">
         {selectedFriends.length > 0 ? (
           <TouchableOpacity onPress={onSend}>
-            <Ionicons name="send" size={32} color="white" />
+            <FontAwesome name="send-o" size={32} color="white" />
           </TouchableOpacity>
         ) : (
-          <Ionicons name="send" size={32} color="#4d4d4d" />
+          <FontAwesome name="send-o" size={32} color="#4d4d4d" />
         )}
       </View>
     </View>

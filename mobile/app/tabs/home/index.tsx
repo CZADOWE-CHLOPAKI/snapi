@@ -31,7 +31,7 @@ export default function Home() {
     const recievedMessagesNotSeen = photos.length;
 
     const MessagesSentNotSeen = () => (
-      <View className="flex items-center flex-row ml-auto">
+      <View className="flex items-center  flex-row ml-auto">
         <View className="pr-2">
           <Text
             className={clsx(
@@ -43,9 +43,9 @@ export default function Home() {
           </Text>
         </View>
         {unseen_by_friend > 0 ? (
-          <AntDesign name="eyeo" size={24} color="white" />
+          <FontAwesome name="send-o" size={16} color="white" />
         ) : (
-          <AntDesign name="eyeo" size={24} color="#4d4d4d" />
+          <FontAwesome name="send-o" size={16} color="#4d4d4d" />
         )}
       </View>
     );
@@ -73,19 +73,25 @@ export default function Home() {
     return (
       <TouchableOpacity
         className={clsx(
-          "bg-gray-dark px-6 flex items-center flex-row w-full  justify-start py-2"
+          "bg-gray-dark px-6 flex items-center flex-row w-full  justify-between py-2"
         )}
         onPress={() => onFriendPress(tag)}
       >
-        <Text className="text-white text-lg mr-4">{tag}</Text>
-        {streak > 0 && (
-          <View className="flex flex-row items-center justify-end mr-4">
-            <Text className="text-lg text-white  pr-2">{streak}</Text>
-            <FontAwesome name="bolt" size={24} color="white" />
-          </View>
-        )}
-        <MessagesSentNotSeen />
-        <MessagesRecievedNotSeenCount />
+        <View className="flex flex-row items-center">
+          <Text className="text-white text-lg mr-4">{tag}</Text>
+          {streak > 0 && (
+            <View className="flex flex-row items-center justify-end mr-4">
+              <Text className="text-lg text-white  pr-2">{streak}</Text>
+              <FontAwesome name="bolt" size={24} color="white" />
+            </View>
+          )}
+        </View>
+
+        <View className="flex flex-row items-center">
+          <MessagesSentNotSeen />
+          <View className="pr-4" />
+          <MessagesRecievedNotSeenCount />
+        </View>
       </TouchableOpacity>
     );
   };
