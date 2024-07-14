@@ -6,13 +6,13 @@ import {
   useImage,
 } from "@shopify/react-native-skia";
 import { router } from "expo-router";
-import { Dimensions } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 
 import { clamp, CropHandler } from "@/components/pictureEditor/CropHandler";
 import { usePictureContext } from "@/context/PictureContext";
 import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
-import React, { useMemo, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import React, { useMemo, useRef, useState } from "react";
+import { TextInput, TouchableOpacity, View } from "react-native";
 
 import {
   Gesture,
@@ -132,8 +132,13 @@ const PictureEditor = () => {
   const image = useImage(pictureFileLocation);
   const [isCropping, setIsCropping] = useState(false);
   const [isAddingText, setIsAddingText] = useState(false);
+  const [text, setText] = useState("asdsa");
+  const inputRef = useRef<TextInput>(null);
 
-  const isEditing = useMemo(() => isCropping, [isCropping]);
+  const isEditing = useMemo(
+    () => isCropping || isAddingText,
+    [isCropping, isAddingText]
+  );
 
   const { pan, x, y } = useTextPan();
   const width = Dimensions.get("window").width;
@@ -156,8 +161,13 @@ const PictureEditor = () => {
     setIsCropping((prev) => !prev);
   };
 
+  const onTextPress = () => {
+    inputRef.current?.focus();
+    console.log("dpasjdas");
+  };
+
   const onAcceptEdit = () => setIsCropping(false);
-  console.log("jladnjk");
+
   return (
     <View className="w-full h-full">
       <View
@@ -187,25 +197,28 @@ const PictureEditor = () => {
             </Canvas>
             <GestureDetector gesture={pan}>
               <View className="absolute ">
-                <Canvas
-                  style={{ width, height }}
-                  className=" absolute w-full h-full bg-error"
-                >
-                  {isAddingText && (
-                    <Text
-                      x={x}
-                      y={y}
-                      color="white"
-                      text="Hello World"
-                      font={font}
-                    />
-                  )}
-                </Canvas>
+                <Pressable onPress={onTextPress}>
+                  <Canvas
+                    style={{ width, height }}
+                    className=" absolute w-full h-full bg-error"
+                  >
+                    {isAddingText && (
+                      <Text x={x} y={y} color="white" text={text} font={font} />
+                    )}
+                  </Canvas>
+                </Pressable>
               </View>
             </GestureDetector>
           </GestureHandlerRootView>
         </View>
       </View>
+      <TextInput
+        ref={inputRef}
+        value={text}
+        onChangeText={setText}
+        // className="invisible"
+        style={{ position: "absolute", top: -100, left: -100 }}
+      />
     </View>
   );
 };
