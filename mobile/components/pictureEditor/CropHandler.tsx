@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-function clamp(val: number, min: number, max: number) {
+export function clamp(val: number, min: number, max: number) {
   return Math.min(Math.max(val, min), max);
 }
 
@@ -129,7 +129,7 @@ export const CropHandler = () => {
         <GestureDetector gesture={pan}>
           <Animated.View
             style={[animatedStyles]}
-            className=" absolute top-0 left-0 w-6 h-6 bg-gray-dark/70 border-white m-2  border-t-2 border-r-2"
+            className="absolute top-0 left-0 w-6 h-6 bg-gray-dark/70 border-white m-2  border-t-2 border-r-2"
           />
         </GestureDetector>
         <GestureDetector gesture={pan2}>
