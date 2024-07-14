@@ -216,7 +216,6 @@ const PictureEditor = () => {
         ref={inputRef}
         value={text}
         onChangeText={setText}
-        // className="invisible"
         style={{ position: "absolute", top: -100, left: -100 }}
       />
     </View>
