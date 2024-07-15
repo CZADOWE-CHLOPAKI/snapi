@@ -13,15 +13,18 @@ const Register = () => {
   const [email, setEmail] = useState("jan.czerwinski@gmail.com");
   const [password, setPassword] = useState("rootroot");
 
+  const [loading, setLoading] = useState(false);
+
   const [tag, setTag] = useState("dzbanek");
 
   const handleSubmit = async () => {
     if (!email || !password || !tag) {
       return;
     }
-
+    setLoading(true);
     // Call the registerToBackend function
     const { ok, statusText } = await registerToBackend(email, password, tag);
+    setLoading(false);
 
     if (ok) {
       router.replace("login");
@@ -69,6 +72,9 @@ const Register = () => {
         <TouchableOpacity onPress={() => router.back()} className="mt-4">
           <Text className="text-white">Already have an account? Login</Text>
         </TouchableOpacity>
+        <Text className="text-white text-center">
+          {loading && "loading ..."}
+        </Text>
       </KeyboardAvoidingView>
     </PageLayout>
   );

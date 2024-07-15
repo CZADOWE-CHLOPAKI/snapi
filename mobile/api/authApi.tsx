@@ -9,6 +9,7 @@ export const loginToBackend = async (email: string, password: string) => {
   let data;
 
   try {
+    console.log("asjadnsja");
     const response = await fetch(`${BASE_API_URL}/login/access-token`, {
       method: "POST",
       headers: {
@@ -17,6 +18,8 @@ export const loginToBackend = async (email: string, password: string) => {
       // Directly use formData which is now a URLSearchParams instance
       body: formData.toString(),
     });
+    console.log(response);
+
     data = await response.json();
   } catch (error) {
     console.error(error);
@@ -34,14 +37,19 @@ export const registerToBackend = async (
   password: string,
   tag: string
 ) => {
-  const response = await fetch(`${BASE_API_URL}/users/signup`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({ email, password, tag }),
-  });
-  console.log(response);
+  let response = { ok: false, statusText: "" };
+  try {
+    const response = await fetch(`${BASE_API_URL}/users/signup/`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ email, password, tag }),
+    });
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 
   return { ok: response.ok, statusText: response.statusText };
 };

@@ -1,12 +1,12 @@
 const HOST = "http://192.168.192.11";
-const BASE_URL = `${HOST}:8888/api/v1`;
+const BASE_URL = `https://maciej-szok.dev/api/v1`;
 
-const viewPhoto = async (uri: string) => {
+const viewPhoto = async () => {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAxMDM2MTYsInN1YiI6IjIifQ.Fx5fh1oXlHXEzL9ncrpJGb-zw9u_UwOO2GA5BdRJPIM";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjE3MzU0NDMsInN1YiI6IjYifQ.uOrJBAurNGTWj77PsJLD_v3JOORmBgTHNZnADgFjCUU";
   try {
-    const response = await fetch(`${BASE_URL}/photos/acknowledge/${uri}`, {
-      method: "POST",
+    const response = await fetch(`${BASE_URL}/friends/`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -20,4 +20,4 @@ const viewPhoto = async (uri: string) => {
   }
 };
 
-viewPhoto("test");
+viewPhoto();

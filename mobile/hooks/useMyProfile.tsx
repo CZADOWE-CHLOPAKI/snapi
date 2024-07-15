@@ -11,6 +11,6 @@ type MyProfile = {
 
 export const useMyProfile = () => {
   const { data: myProfile, isLoading: isMyProfileLoading } =
-    useFetcher<MyProfile>("/users/me/", "GET");
+    useFetcher<MyProfile>("/users/me", "GET");
   return { myProfile, isMyProfileLoading };
 };

@@ -8,7 +8,7 @@ export const useDiscoverFriends = () => {
   const { token } = useUserContext();
   const { data, isLoading, refresh } = useFetcher<{
     friends: string[];
-  }>("/friends/discover", "GET", undefined, "q=" + searchString);
+  }>("/friends/discover/", "GET", undefined, "q=" + searchString);
   const { fetchPost } = useFetch();
 
   const inviteFriend = async (tag: string) => {

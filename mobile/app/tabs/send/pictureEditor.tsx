@@ -9,16 +9,12 @@ import { router } from "expo-router";
 import { Dimensions, Pressable } from "react-native";
 
 import { clamp, CropHandler } from "@/components/pictureEditor/CropHandler";
+import { GestureDetectorSwitch } from "@/components/pictureEditor/GestureDetectorSwitch";
 import { usePictureContext } from "@/context/PictureContext";
 import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useRef, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
-
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   useAnimatedReaction,
   useAnimatedStyle,
@@ -132,7 +128,8 @@ const PictureEditor = () => {
   const image = useImage(pictureFileLocation);
   const [isCropping, setIsCropping] = useState(false);
   const [isAddingText, setIsAddingText] = useState(false);
-  const [text, setText] = useState("asdsa");
+  const [addedText, setAddedText] = useState("");
+  const [text, setText] = useState("");
   const inputRef = useRef<TextInput>(null);
 
   const isEditing = useMemo(
@@ -161,12 +158,24 @@ const PictureEditor = () => {
     setIsCropping((prev) => !prev);
   };
 
-  const onTextPress = () => {
+  const onTextUiPress = () => {
+    setIsAddingText((prev) => !prev);
+  };
+
+  const onTextInputPress = () => {
+    if (!isAddingText) return;
     inputRef.current?.focus();
+    setAddedText("");
     console.log("dpasjdas");
   };
 
-  const onAcceptEdit = () => setIsCropping(false);
+  const onAcceptEdit = () => {
+    if (isCropping) setIsCropping(false);
+    if (isAddingText) {
+      setAddedText(text);
+      setIsAddingText(false);
+    }
+  };
 
   return (
     <View className="w-full h-full">
@@ -177,7 +186,7 @@ const PictureEditor = () => {
         <PictureEditorUi
           onSend={onSend}
           onCropPress={onCropPress}
-          onTextPress={() => setIsAddingText((prev) => !prev)}
+          onTextPress={onTextUiPress}
           isEditing={isEditing}
           onAcceptEdit={onAcceptEdit}
         />
@@ -194,10 +203,13 @@ const PictureEditor = () => {
                 width={width}
                 height={height}
               />
+              {addedText !== "" && (
+                <Text x={x} y={y} color="white" text={addedText} font={font} />
+              )}
             </Canvas>
-            <GestureDetector gesture={pan}>
+            <GestureDetectorSwitch gesture={pan} enabled={isAddingText}>
               <View className="absolute ">
-                <Pressable onPress={onTextPress}>
+                <Pressable onPress={onTextInputPress}>
                   <Canvas
                     style={{ width, height }}
                     className=" absolute w-full h-full bg-error"
@@ -208,16 +220,23 @@ const PictureEditor = () => {
                   </Canvas>
                 </Pressable>
               </View>
-            </GestureDetector>
+            </GestureDetectorSwitch>
           </GestureHandlerRootView>
         </View>
       </View>
-      <TextInput
-        ref={inputRef}
-        value={text}
-        onChangeText={setText}
-        style={{ position: "absolute", top: -100, left: -100 }}
-      />
+      {isAddingText && (
+        <TextInput
+          ref={inputRef}
+          value={text}
+          onChangeText={setText}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: -10000,
+            width: 100,
+          }}
+        />
+      )}
     </View>
   );
 };

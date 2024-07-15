@@ -14,8 +14,8 @@ import {
 } from "react-native";
 
 const Login = () => {
-  const [email, setEmail] = useState("jan.czerwinski@gmail.com");
-  const [password, setPassword] = useState("rootroot");
+  const [email, setEmail] = useState("jan.ignacy.czerwinski@gmail.com");
+  const [password, setPassword] = useState("ryyba123");
 
   const [error, setError] = useState("");
 
@@ -30,7 +30,10 @@ const Login = () => {
       setError("Please fill in all fields");
       return;
     }
+    console.log("logging in....");
     const { token, error: loginError } = await loginToBackend(email, password);
+    console.log("logged in");
+
     if (loginError) {
       setError(loginError);
       return;
