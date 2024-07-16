@@ -67,7 +67,7 @@ def discover_friends(session: SessionDep, current_user: CurrentUser, q: str) -> 
     friends_ids = [f.user_1_id if f.user_1_id != current_user.id else f.user_2_id for f in friends]
     friends_ids = list(set(friends_ids))
 
-    statement = select(User).where(User.id != current_user.id).where(col(User.id).notin_(friends_ids)).where(col(User.tag).ilike(f"%{q}%"))
+    statement = select(User).where(User.id != current_user.id).where(col(User.id).notin_(friends_ids)).where(col(User.tag).ilike(f"{q}%"))
     friends = session.exec(statement).all()
 
     return DiscoverFriendsPublic(friends=[friend.tag for friend in friends])
