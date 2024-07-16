@@ -11,6 +11,7 @@ import requests
 from requests.exceptions import ConnectionError, HTTPError
 
 from app.core.config import settings
+from app.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +55,12 @@ def send_push_message(token, message, extra=None):
         logger.exception('Device not registered')
     except PushTicketError as exc:
         logger.exception('Failed to send push notification - some other error dunno')
+
+
+def send_new_photo_notifications(user: User, tokens: list[str]):
+    for token in tokens:
+        try:
+            send_push_message(token, f'New photo from {user.tag}')
+        except Exception as e:
+            logger.exception('Failed to send push notification')
+            # TODO what to do in case of failed push notification?

@@ -7,7 +7,8 @@ from sqlmodel import Field, SQLModel, select
 
 from app.api.deps import CurrentUser, SessionDep
 from app.interfaces.files import OnDiskImageStorage
-from app.models import Photo, UserPhoto, User
+from app.models import Photo, UserPhoto, User, PushToken
+from app.services.push_notifications import send_new_photo_notifications
 
 router = APIRouter()
 
@@ -47,6 +48,10 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
     session.add(photo_db)
     session.commit()
 
+    notification_tokens = []
+
+    logger.info('create photo')
+
     for friend in friends:
         # TODO what to do in case of non existing friend?
         # TODO check if the friend is already a friend, if not then dont create UserPhoto for this user
@@ -57,6 +62,13 @@ def create_photo(*, session: SessionDep, current_user: CurrentUser, data: Create
         statement = UserPhoto(sender_id=current_user.id, recipient_id=user.id, photo_id=photo_db.id)
         session.add(statement)
 
+        tkn = select(PushToken).where(PushToken.user_id == user.id).where(PushToken.active == True)
+        token = session.exec(tkn).first()
+        if token is not None:
+            notification_tokens.append(token.token)
+
+    logger.info(f'user tokens {notification_tokens=}')
+    send_new_photo_notifications(current_user, notification_tokens,)
     session.commit()
 
     return CreatePhotoResponse(id=0, filename=filename)
