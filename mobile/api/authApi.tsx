@@ -37,7 +37,8 @@ export const registerToBackend = async (
   password: string,
   tag: string
 ) => {
-  let response = { ok: false, statusText: "" };
+  let detail = "";
+  let ok = false;
   try {
     const response = await fetch(`${BASE_API_URL}/users/signup/`, {
       headers: {
@@ -46,10 +47,12 @@ export const registerToBackend = async (
       method: "POST",
       body: JSON.stringify({ email, password, tag }),
     });
-    console.log(response);
+    const data = await response.json();
+    ok = response.ok;
+    detail = data?.detail;
   } catch (error) {
-    console.log(error);
+    console.error("erorr: ", error);
   }
 
-  return { ok: response.ok, statusText: response.statusText };
+  return { detail, ok };
 };

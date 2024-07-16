@@ -1,11 +1,10 @@
-import { useUserContext } from "@/context/UserContext";
 import { useFetcher } from "@/hooks/useFetcher";
 import { useState } from "react";
 import { useFetch } from "./useFetch";
 export const useDiscoverFriends = () => {
   const [searchString, setSearchString] = useState("");
   // TODO: Implement search string
-  const { token } = useUserContext();
+
   const { data, isLoading, refresh } = useFetcher<{
     friends: string[];
   }>("/friends/discover/", "GET", undefined, "q=" + searchString);

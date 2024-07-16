@@ -2,18 +2,14 @@ import { registerToBackend } from "@/api/authApi";
 import { PageLayout } from "@/components/PageLayout";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const Register = () => {
   const [email, setEmail] = useState("jan.czerwinski@gmail.com");
   const [password, setPassword] = useState("rootroot");
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const [tag, setTag] = useState("dzbanek");
 
@@ -22,21 +18,23 @@ const Register = () => {
       return;
     }
     setLoading(true);
-    // Call the registerToBackend function
-    const { ok, statusText } = await registerToBackend(email, password, tag);
+    console.log("register to backend");
+    const { ok, detail } = await registerToBackend(email, password, tag);
+
     setLoading(false);
 
     if (ok) {
       router.replace("login");
     } else {
-      console.error(statusText);
+      setError(detail);
+      console.error(detail);
       // Handle error
     }
   };
 
   return (
     <PageLayout>
-      <KeyboardAvoidingView className="flex-1 bg-gray-dark justify-center items-center pb-60">
+      <View className="flex-1 bg-gray-dark justify-center items-center pb-60">
         <Text className="text-white text-4xl mb-8">Register</Text>
         <TextInput
           className="text-white text-lg bg-gray-700 p-4 rounded-lg w-80 mb-4"
@@ -75,7 +73,8 @@ const Register = () => {
         <Text className="text-white text-center">
           {loading && "loading ..."}
         </Text>
-      </KeyboardAvoidingView>
+        {error && <Text className="text-error text-center">{error}</Text>}
+      </View>
     </PageLayout>
   );
 };
