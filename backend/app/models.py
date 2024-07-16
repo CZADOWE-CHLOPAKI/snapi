@@ -49,6 +49,7 @@ class User(UserBase, table=True):
     # sender_photos: list["UserPhoto"] = Relationship(back_populates="sender", sa_relationship_kwargs=dict(foreign_keys="[UserPhoto.sender_id]"))
     # recipient_photos: list["UserPhoto"] = Relationship(back_populates="recipient", sa_relationship_kwargs=dict(foreign_keys="[UserPhoto.recipient_id]"))
     # recipient_photos: list["UserPhoto"] = Relationship(back_populates="recipient")
+    push_tokens: list["PushToken"] = Relationship(back_populates="user")
 
 
 
@@ -140,3 +141,11 @@ class UserPhoto(UserPhotoBase, table=True):
 
     photo: Photo | None = Relationship(back_populates="user_photos")
     photo_id: int | None = Field(default=None, foreign_key="photo.id", nullable=False)
+
+
+class PushToken(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    token: str = Field(max_length=255)
+    active: bool = True
+    user_id: int = Field(foreign_key="user.id")
+    user: User | None = Relationship(back_populates="push_tokens")
