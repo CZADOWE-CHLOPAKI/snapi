@@ -16,8 +16,8 @@ import {
 } from "react-native";
 
 const Login = () => {
-  const [email, setEmail] = useState("jan.ignacy.czerwinski@gmail.com");
-  const [password, setPassword] = useState("ryyba123");
+  const [email, setEmail] = useState("jan.czerwinski@gmail.com");
+  const [password, setPassword] = useState("rootroot");
 
   const { pushToken } = usePushNofiticationContext();
   const { fetchPost } = useFetch();
@@ -37,7 +37,6 @@ const Login = () => {
     }
     console.log("logging in....");
     const { token, error: loginError } = await loginToBackend(email, password);
-    await fetchPost("/notification-token", { token: pushToken });
 
     console.log("logged in");
 
@@ -49,6 +48,10 @@ const Login = () => {
     setToken(token);
     router.replace("/tabs");
   };
+
+  useEffect(() => {
+    fetchPost("/notification-token", { token: pushToken });
+  }, [token]);
 
   return (
     <PageLayout>

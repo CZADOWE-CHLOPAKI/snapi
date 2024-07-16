@@ -17,8 +17,9 @@ export const loginToBackend = async (email: string, password: string) => {
       // Directly use formData which is now a URLSearchParams instance
       body: formData.toString(),
     });
-
     data = await response.json();
+    console.log("login response jsadkjsadhjkdsahjksahjkasdhjk");
+    console.log(data?.detail);
   } catch (error) {
     console.error(error);
     return { token: null, error: `eroror occruerd ${error}` };
