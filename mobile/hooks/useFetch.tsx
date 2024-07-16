@@ -17,6 +17,7 @@ export const useFetch = () => {
   };
 
   const fetchPost = async (url: string, body: any) => {
+    console.log("fetch post");
     const response = await fetch(`${BASE_API_URL}${url}`, {
       method: "POST",
       headers: {
@@ -25,6 +26,7 @@ export const useFetch = () => {
       },
       body: JSON.stringify(body),
     });
+    console.log(response);
     const data = await response.json();
     return data;
   };
