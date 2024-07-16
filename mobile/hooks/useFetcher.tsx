@@ -45,8 +45,14 @@ export function useFetcher<T>(
       const response = await fetch(full_url, options);
       // console.log("error below?");
       // console.log(await response.text());
+      console.log("full_url");
+      console.log(full_url);
 
+      console.log("response");
+      console.log(response);
       const newData = await response.json();
+      console.log("newData");
+      console.log(newData);
       setData(newData);
     } catch (error) {
       console.error(error);

@@ -1,4 +1,3 @@
-import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { useFetch } from "./useFetch";
 import { useFetcher } from "./useFetcher";
@@ -9,7 +8,7 @@ export const usePendingFriends = () => {
   const { token } = useUserContext();
   const { data, isLoading, refresh } = useFetcher<{
     friends: string[];
-  }>("/friends/pending", "GET", {});
+  }>("/friends/pending/", "GET", {});
 
   const { fetchPost } = useFetch();
 
