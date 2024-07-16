@@ -18,10 +18,15 @@ class UpdateNotificationToken(BaseModel):
 @router.post("/", response_model=Message)
 def update_notification_token(*, session: SessionDep, current_user: CurrentUser, data: UpdateNotificationToken) -> Any:
     # mark old tokens as inactive
-    return Message(message="Token updated")
-
     # TODO move to a separate crud
-    session.exec(select(PushToken).where(PushToken.user_id == current_user.id).where(PushToken.active==True)).update({PushToken.active: False})
+    # TODO fix the sql
+    # session.exec(select(PushToken).where(PushToken.user_id == current_user.id).where(PushToken.active==True)).update({PushToken.active: False})
+    old_tokens_st = select(PushToken).where(User.id == current_user.id).where(PushToken.active==True)
+    old_tokens = session.exec(old_tokens_st).all()
+    for token in old_tokens:
+        token.active = False
+    session.commit()
+
     new_token = PushToken(token=data.token, user_id=current_user.id)
     session.add(new_token)
     session.commit()
