@@ -1,4 +1,5 @@
 import { PictureContextProvider } from "@/context/PictureContext";
+import { PushNotificationsProvider } from "@/context/PushNotificationContext";
 import { UserContextProvider } from "@/context/UserContext";
 
 import { Stack } from "expo-router";
@@ -17,29 +18,31 @@ const getNavigationOptions = (title: string): NativeStackNavigationOptions => ({
 export default function RootLayout() {
   return (
     <RootSiblingParent>
-      <PictureContextProvider>
-        <UserContextProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-              name="test"
-              options={getNavigationOptions("test") as any}
-            />
-            <Stack.Screen
-              name="test_gl"
-              options={getNavigationOptions("test") as any}
-            />
-            <Stack.Screen
-              name="login"
-              options={getNavigationOptions("login") as any}
-            />
-            <Stack.Screen
-              name="register"
-              options={getNavigationOptions("register") as any}
-            />
-            <Stack.Screen name="tabs" />
-          </Stack>
-        </UserContextProvider>
-      </PictureContextProvider>
+      <PushNotificationsProvider>
+        <PictureContextProvider>
+          <UserContextProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen
+                name="test"
+                options={getNavigationOptions("test") as any}
+              />
+              <Stack.Screen
+                name="test_gl"
+                options={getNavigationOptions("test") as any}
+              />
+              <Stack.Screen
+                name="login"
+                options={getNavigationOptions("login") as any}
+              />
+              <Stack.Screen
+                name="register"
+                options={getNavigationOptions("register") as any}
+              />
+              <Stack.Screen name="tabs" />
+            </Stack>
+          </UserContextProvider>
+        </PictureContextProvider>
+      </PushNotificationsProvider>
     </RootSiblingParent>
   );
 }

@@ -35,7 +35,7 @@
     "expo-image": "~1.12.12",
     "expo-linking": "~6.3.1",
     "expo-network": "~6.0.1",
-    "expo-notifications": "~0.28.9",
+    "expo-notifications": "~0.28.10",
     "expo-processing": "^2.3.7",
     "expo-router": "~3.5.18",
     "expo-screen-capture": "~6.0.1",

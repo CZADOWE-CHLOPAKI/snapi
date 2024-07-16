@@ -6,13 +6,10 @@ import { useFriends } from "@/hooks/useFriends";
 import { router } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Image, SafeAreaView, Text, View } from "react-native";
-type SinglePhotoProps = {
-  uri: string;
-};
 
 const SECONDS_TO_DISPLAY_PHOTO = 5;
 
-const CONSUME_PHOTO = false;
+const CONSUME_PHOTO = true;
 
 // const SinglePhoto = ({ uri }: SinglePhotoProps) => {
 //   return (

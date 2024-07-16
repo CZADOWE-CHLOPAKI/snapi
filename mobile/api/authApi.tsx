@@ -9,7 +9,6 @@ export const loginToBackend = async (email: string, password: string) => {
   let data;
 
   try {
-    console.log("asjadnsja");
     const response = await fetch(`${BASE_API_URL}/login/access-token`, {
       method: "POST",
       headers: {
@@ -18,7 +17,6 @@ export const loginToBackend = async (email: string, password: string) => {
       // Directly use formData which is now a URLSearchParams instance
       body: formData.toString(),
     });
-    console.log(response);
 
     data = await response.json();
   } catch (error) {

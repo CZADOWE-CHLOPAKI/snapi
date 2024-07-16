@@ -4158,10 +4158,10 @@ expo-network@~6.0.1:
   resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-6.0.1.tgz#0e1f8e2476d8094ae7eada651a58219eda2ec4e8"
   integrity sha512-WXXvkt1H75ojHVa263Jq+qjIyMzCfaoRzHKzOBMuSyDDcma9WpvKJpR1YpEQZH/zDhSfkKvh7Q3wRGOJr1J+dQ==
 
-expo-notifications@~0.28.9:
-  version "0.28.9"
-  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.9.tgz#3ef49ed8931c0f871c3ffed5af9d09552d169df3"
-  integrity sha512-lilBS+0n+MC71jU6R9kYr91nev2God/OyxGRtab37XBmr7OWKL+jrahwdIRc2fJXq3hkQoiVWr4i9COGVFF8sA==
+expo-notifications@~0.28.10:
+  version "0.28.10"
+  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.28.10.tgz#5db8ba41f5fd09db7db8323997f2185feb1830cc"
+  integrity sha512-DK+Edc7lQajsD7//0ivP68bCijyQV7QEk7mCaORXMltM9Ec516CrWKP1v3rRX6RvXVP1s5t6K/aEooiz6AhM+A==
   dependencies:
     "@expo/image-utils" "^0.5.0"
     "@ide/backoff" "^1.0.0"

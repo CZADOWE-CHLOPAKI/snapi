@@ -1,7 +1,9 @@
 import { loginToBackend } from "@/api/authApi";
 import { AppleAuth } from "@/components/AppleAuth";
 import { PageLayout } from "@/components/PageLayout";
+import { usePushNofiticationContext } from "@/context/PushNotificationContext";
 import { useUserContext } from "@/context/UserContext";
+import { useFetch } from "@/hooks/useFetch";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -16,6 +18,9 @@ import {
 const Login = () => {
   const [email, setEmail] = useState("jan.ignacy.czerwinski@gmail.com");
   const [password, setPassword] = useState("ryyba123");
+
+  const { pushToken } = usePushNofiticationContext();
+  const { fetchPost } = useFetch();
 
   const [error, setError] = useState("");
 
@@ -32,6 +37,8 @@ const Login = () => {
     }
     console.log("logging in....");
     const { token, error: loginError } = await loginToBackend(email, password);
+    await fetchPost("/notification-token", { token: pushToken });
+
     console.log("logged in");
 
     if (loginError) {
