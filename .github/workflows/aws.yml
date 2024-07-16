@@ -34,6 +34,15 @@ on:
 permissions:
   contents: read
 
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REGISTRY: ${{ vars.ECR_REGISTRY }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
+  ECS_SERVICE: ${{ vars.ECS_SERVICE }}
+  ECS_BACKEND_TASK_DEFINITION: ${{ secrets.BACKEND_TASK_DEFINITION }}
+
+
 jobs:
   push-backend-image:
     name: Deploy
@@ -66,6 +75,32 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Update ECS task definition
+      id: task-def
+      run: |
+        NEW_IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$(date +%Y%m%d%H%M%S)
+        echo "Fetching existing task definition..."
+        EXISTING_TASK_DEF=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION)
+        echo "Updating task definition with new image URI..."
+        NEW_TASK_DEF=$(echo $EXISTING_TASK_DEF | jq --arg IMAGE_URI "$NEW_IMAGE_URI" '.taskDefinition.containerDefinitions[0].image = $IMAGE_URI')
+        NEW_TASK_DEF=$(echo $NEW_TASK_DEF | jq '.taskDefinition | {family, containerDefinitions, volumes, taskRoleArn, executionRoleArn, networkMode, placementConstraints, requiresCompatibilities, cpu, memory}')
+        echo $NEW_TASK_DEF > new_task_def.json
+        aws ecs register-task-definition --cli-input-json file://new_task_def.json
+        TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION | jq -r '.taskDefinition.taskDefinitionArn')
+
+        echo "::set-output name=task-def-arn::$TASK_DEF_ARN"
+
+    - name: Update ECS service
+      run: |
+        TASK_DEF_ARN=${{ steps.task-def.outputs.task-def-arn }}
+        echo "Updating ECS service..."
+        aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $TASK_DEF_ARN
+
+    - name: Post-deployment verification
+      run: |
+        echo "Verifying deployment..."
+        aws ecs describe-services --cluster $ECS_CLUSTER --services $ECS_SERVICE
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
