@@ -60,7 +60,7 @@ def send_push_message(token, message, extra=None):
 def send_new_photo_notifications(user: User, tokens: list[str]):
     for token in tokens:
         try:
-            send_push_message(token, f'New photo from {user.tag}')
+            send_push_message(token, f'{user.tag} is a massive yapper!')
         except Exception as e:
             logger.exception('Failed to send push notification')
             # TODO what to do in case of failed push notification?

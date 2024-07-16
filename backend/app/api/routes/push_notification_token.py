@@ -20,8 +20,13 @@ def update_notification_token(*, session: SessionDep, current_user: CurrentUser,
     # mark old tokens as inactive
     # TODO move to a separate crud
     # TODO fix the sql
+    existing_token_st = select(PushToken).where(PushToken.token == data.token).where(PushToken.active==True).where(PushToken.user_id == current_user.id)
+    existing_token = session.exec(existing_token_st).first()
+    if existing_token:
+        return Message(message="Token already exists")
+
     # session.exec(select(PushToken).where(PushToken.user_id == current_user.id).where(PushToken.active==True)).update({PushToken.active: False})
-    old_tokens_st = select(PushToken).where(User.id == current_user.id).where(PushToken.active==True)
+    old_tokens_st = select(PushToken).where(PushToken.user_id == current_user.id).where(PushToken.active==True)
     old_tokens = session.exec(old_tokens_st).all()
     for token in old_tokens:
         token.active = False
