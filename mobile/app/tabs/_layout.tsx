@@ -3,10 +3,11 @@ import {
   BottomTabNavigationOptions,
 } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 
+import { useMyProfile } from "@/hooks/useMyProfile";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 const getTabOptions = (): BottomTabNavigationOptions => {
@@ -22,11 +23,29 @@ const getTabOptions = (): BottomTabNavigationOptions => {
   };
 };
 
+const Header = ({ tag }: { tag?: string }) => {
+  const onSettingsClick = () => {
+    router.push("/settings");
+  };
+  return (
+    <View className="w-full h-20 bg-gray-dark flex flex-row  justify-between items-end px-4">
+      <Text className="text-white text-xl">hi {tag}</Text>
+      <Pressable onPress={onSettingsClick}>
+        <Ionicons name="settings-outline" size={24} color={"white"} />
+      </Pressable>
+    </View>
+  );
+};
+
 const HomeTabs = () => {
+  const { myProfile } = useMyProfile();
+
   return (
     <Tabs
       initialRouteName="home"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        header: () => <Header tag={myProfile?.tag} />,
+      }}
       tabBar={(props: any) =>
         Platform.OS === "ios" ? (
           <BlurView
@@ -65,15 +84,6 @@ const HomeTabs = () => {
           ...getTabOptions(),
           tabBarIcon: ({ color }: { color: string }) => (
             <AntDesign name="adduser" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          ...getTabOptions(),
-          tabBarIcon: ({ color }: { color: string }) => (
-            <Ionicons name="settings-outline" size={24} color={color} />
           ),
         }}
       />

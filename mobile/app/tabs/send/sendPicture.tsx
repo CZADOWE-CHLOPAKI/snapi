@@ -51,7 +51,7 @@ const SendPicture = () => {
     await sendPhoto(pictureFileLocation, selectedFriends);
     await refreshFriends();
     setPictureSent(true);
-    router.replace("/");
+    router.replace("/tabs");
   };
   if (!pictureSent && onSendPressed) return <SpinnerPage />;
   return (

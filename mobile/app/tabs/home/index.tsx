@@ -96,6 +96,20 @@ export default function Home() {
     );
   };
 
+  // return (
+  //   <View className="w-full h-full justify-center items-center flex">
+  //     <Pressable
+  //       onPress={() => {
+  //         showToast("dupsko", "good");
+  //       }}
+  //     >
+  //       <View className="w-10 h-10 bg-error p-10">
+  //         <Text className="text-white">dupa</Text>
+  //       </View>
+  //     </Pressable>
+  //   </View>
+  // );
+
   return (
     <SafeAreaView>
       <View className="py-4 bg-gray-dark ">

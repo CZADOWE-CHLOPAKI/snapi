@@ -1,6 +1,7 @@
 import { PictureContextProvider } from "@/context/PictureContext";
 import { PushNotificationsProvider } from "@/context/PushNotificationContext";
-import { UserContextProvider } from "@/context/UserContext";
+import { UserContextProvider, useUserContext } from "@/context/UserContext";
+import { usePreventScreenCapture } from "expo-screen-capture";
 
 import { Stack } from "expo-router";
 import { RootSiblingParent } from "react-native-root-siblings";
@@ -16,33 +17,47 @@ const getNavigationOptions = (title: string): NativeStackNavigationOptions => ({
 });
 
 export default function RootLayout() {
+  usePreventScreenCapture();
+
   return (
     <RootSiblingParent>
       <PushNotificationsProvider>
         <PictureContextProvider>
           <UserContextProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen
-                name="test"
-                options={getNavigationOptions("test") as any}
-              />
-              <Stack.Screen
-                name="test_gl"
-                options={getNavigationOptions("test") as any}
-              />
-              <Stack.Screen
-                name="login"
-                options={getNavigationOptions("login") as any}
-              />
-              <Stack.Screen
-                name="register"
-                options={getNavigationOptions("register") as any}
-              />
-              <Stack.Screen name="tabs" />
-            </Stack>
+            <Navigation />
           </UserContextProvider>
         </PictureContextProvider>
       </PushNotificationsProvider>
     </RootSiblingParent>
   );
 }
+
+const Navigation = () => {
+  const { userName } = useUserContext();
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="test" options={getNavigationOptions("test") as any} />
+      <Stack.Screen
+        name="test_gl"
+        options={getNavigationOptions("test") as any}
+      />
+      <Stack.Screen
+        name="login"
+        options={getNavigationOptions("login") as any}
+      />
+      <Stack.Screen
+        name="register"
+        options={getNavigationOptions("register") as any}
+      />
+      <Stack.Screen
+        name="settings"
+        options={getNavigationOptions("settings") as any}
+      />
+      <Stack.Screen name="tabs" />
+    </Stack>
+  );
+};

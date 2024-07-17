@@ -12,6 +12,7 @@ module.exports = {
       'black': '#000000',
       "transparent": "transparent",
       "error": "#ff5252",
+      "success": "#4caf50",
     },
 
   },

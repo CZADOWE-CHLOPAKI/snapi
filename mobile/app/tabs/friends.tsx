@@ -1,6 +1,7 @@
 import PendingFriendsList from "@/components/PendingFriendsList";
 import { useDiscoverFriends } from "@/hooks/useDiscoverFriends";
 import { usePendingFriends } from "@/hooks/usePendingFriends";
+import { showToast } from "@/utils/showToast";
 import { AntDesign } from "@expo/vector-icons";
 import {
   ActivityIndicator,
@@ -21,12 +22,6 @@ const Friends = () => {
     setSearchString,
     inviteFriend,
   } = useDiscoverFriends();
-  // console.log(
-  //   "discoveredFriends",
-  //   discoveredFriends?.length,
-  //   " ",
-  //   discoveredFriends
-  // );
 
   const DiscoveredFriends = () =>
     isDiscoverFriendsLoading || !discoveredFriends ? (
@@ -36,7 +31,10 @@ const Friends = () => {
     ) : (
       <PendingFriendsList
         friends={discoveredFriends}
-        onPlusClick={(tag) => inviteFriend(tag)}
+        onPlusClick={async (tag) => {
+          await inviteFriend(tag);
+          showToast("friend invited", "good");
+        }}
         label={"found friends"}
         displayTrashCan={false}
       />
@@ -69,7 +67,10 @@ const Friends = () => {
               label={"friend invitations"}
               displayTrashCan={true}
               friends={pendingFriends as string[]}
-              onPlusClick={(tag) => acceptFriendRequest(tag)}
+              onPlusClick={async (tag) => {
+                await acceptFriendRequest(tag);
+                showToast("friend added", "good");
+              }}
             />
           )}
         </View>

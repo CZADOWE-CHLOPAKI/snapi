@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 const shareText = async (tag: string) => {
-  const text = `Hey! Add me on the APP_NAME! My tag is ${tag} \n
+  const text = `Hey! You can add me on Yapper! My tag is ${tag} \n
   Download the app here: https://app_name.com/download`;
 
   try {
