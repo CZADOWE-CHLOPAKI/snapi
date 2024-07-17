@@ -1,5 +1,5 @@
 import { useFetcher } from "@/hooks/useFetcher";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFetch } from "./useFetch";
 export const useDiscoverFriends = () => {
   const [searchString, setSearchString] = useState("");
@@ -14,6 +14,9 @@ export const useDiscoverFriends = () => {
     await fetchPost(`/friends/invite/${tag}`, {});
   };
 
+  useEffect(() => {
+    console.log("searchString", searchString);
+  }, [searchString]);
   return {
     isDiscoverFriendsLoading: isLoading,
     discoveredFriends: data?.friends,

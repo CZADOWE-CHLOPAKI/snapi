@@ -43,9 +43,6 @@ export const usePushNotifications = () => {
             projectId,
           })
         ).data;
-        console.log("--------------------PUSH TOKEN -------------------");
-
-        console.log(pushTokenString);
         return pushTokenString;
       } catch (e: unknown) {
         console.error(`${e}`);

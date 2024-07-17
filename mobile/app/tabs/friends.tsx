@@ -2,7 +2,13 @@ import PendingFriendsList from "@/components/PendingFriendsList";
 import { useDiscoverFriends } from "@/hooks/useDiscoverFriends";
 import { usePendingFriends } from "@/hooks/usePendingFriends";
 import { AntDesign } from "@expo/vector-icons";
-import { ActivityIndicator, SafeAreaView, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 const Friends = () => {
   const { pendingFriends, isGettingPendingFriends, acceptFriendRequest } =
@@ -15,6 +21,26 @@ const Friends = () => {
     setSearchString,
     inviteFriend,
   } = useDiscoverFriends();
+  // console.log(
+  //   "discoveredFriends",
+  //   discoveredFriends?.length,
+  //   " ",
+  //   discoveredFriends
+  // );
+
+  const DiscoveredFriends = () =>
+    isDiscoverFriendsLoading || !discoveredFriends ? (
+      <View className="h-full w-full flex justify-center items-center">
+        <ActivityIndicator color="white" className="pb-60" />
+      </View>
+    ) : (
+      <PendingFriendsList
+        friends={discoveredFriends}
+        onPlusClick={(tag) => inviteFriend(tag)}
+        label={"found friends"}
+        displayTrashCan={false}
+      />
+    );
 
   return (
     <SafeAreaView className="h-full bg-gray-dark py-4">
@@ -49,17 +75,14 @@ const Friends = () => {
         </View>
       ) : (
         <View>
-          {isDiscoverFriendsLoading || !discoveredFriends ? (
-            <View className="h-full w-full flex justify-center items-center">
-              <ActivityIndicator color="white" className="pb-60" />
-            </View>
+          {searchString.length >= 3 ? (
+            <DiscoveredFriends />
           ) : (
-            <PendingFriendsList
-              friends={discoveredFriends}
-              onPlusClick={(tag) => inviteFriend(tag)}
-              label={"found friends"}
-              displayTrashCan={false}
-            />
+            <View className="h-full w-full flex justify-center items-center">
+              <Text className="text-xl text-white">
+                type in at least 3 characters to look for friends
+              </Text>
+            </View>
           )}
         </View>
       )}
