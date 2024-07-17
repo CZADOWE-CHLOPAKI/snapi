@@ -78,9 +78,11 @@ const Friends = () => {
           {searchString.length >= 3 ? (
             <DiscoveredFriends />
           ) : (
-            <View className="h-full w-full flex justify-center items-center">
+            <View className=" p-8  w-full flex justify-center items-center">
               <Text className="text-xl text-white">
-                type in at least 3 characters to look for friends
+                {discoveredFriends?.length !== 0
+                  ? "type in at least 3 characters to look for friends"
+                  : "no friends with this tag"}
               </Text>
             </View>
           )}

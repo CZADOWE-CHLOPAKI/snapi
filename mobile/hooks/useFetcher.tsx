@@ -1,17 +1,17 @@
 import { BASE_API_URL } from "@/api/apiSettings";
 import { useUserContext } from "@/context/UserContext";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useFetcher<T>(
   url: string,
   method: "POST" | "GET",
-  body?: unknown,
-  params?: string
+  body?: unknown
 ) {
   const [data, setData] = useState<T>();
   const [isLoading, setLoading] = useState(false);
   const { token } = useUserContext();
+  const [params, setParams] = useState("");
 
   useFocusEffect(
     useCallback(() => {
@@ -19,9 +19,9 @@ export function useFetcher<T>(
     }, [])
   );
 
-  // useEffect(() => {
-  //   refresh();
-  // }, []);
+  useEffect(() => {
+    refresh();
+  }, [params]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -39,9 +39,9 @@ export function useFetcher<T>(
     try {
       let full_url = `${BASE_API_URL}${url}`;
       if (params !== undefined) {
-        full_url = `${BASE_API_URL}${url}?${params}`;
+        full_url = `${BASE_API_URL}${url}?q=${params}`;
       }
-      // console.log(full_url);
+      console.log("fullurl ", full_url);
       const response = await fetch(full_url, options);
       // console.log("error below?");
       // console.log(await response.text());
@@ -58,7 +58,7 @@ export function useFetcher<T>(
       console.error(error);
     }
     setLoading(false);
-  }, []);
+  }, [params]);
 
-  return { data, isLoading, refresh };
+  return { data, isLoading, refresh, setParams };
 }

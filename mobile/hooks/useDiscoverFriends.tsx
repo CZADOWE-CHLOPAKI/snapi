@@ -5,9 +5,9 @@ export const useDiscoverFriends = () => {
   const [searchString, setSearchString] = useState("");
   // TODO: Implement search string
 
-  const { data, isLoading, refresh } = useFetcher<{
+  const { data, isLoading, refresh, setParams } = useFetcher<{
     friends: string[];
-  }>("/friends/discover/", "GET", undefined, "q=" + searchString);
+  }>("/friends/discover/", "GET", undefined);
   const { fetchPost } = useFetch();
 
   const inviteFriend = async (tag: string) => {
@@ -15,8 +15,9 @@ export const useDiscoverFriends = () => {
   };
 
   useEffect(() => {
-    console.log("searchString", searchString);
+    setParams(searchString);
   }, [searchString]);
+
   return {
     isDiscoverFriendsLoading: isLoading,
     discoveredFriends: data?.friends,
