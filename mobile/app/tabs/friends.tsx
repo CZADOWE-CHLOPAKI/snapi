@@ -42,7 +42,7 @@ const Friends = () => {
 
   return (
     <SafeAreaView className="h-full bg-gray-dark py-4">
-      <View className="flex flex-row items-center px-6  ">
+      <View className="flex flex-row items-center px-6 ">
         <View className=" ">
           <AntDesign name="search1" size={24} color="white" />
         </View>

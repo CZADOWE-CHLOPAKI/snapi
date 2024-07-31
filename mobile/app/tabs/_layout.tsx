@@ -28,7 +28,7 @@ const Header = ({ tag }: { tag?: string }) => {
     router.push("/settings");
   };
   return (
-    <View className="w-full h-20 bg-gray-dark flex flex-row  justify-between items-end px-4">
+    <View className="w-full h-20 border-b pb-2 border-gray-light bg-gray-dark flex flex-row  justify-between items-end px-4">
       <Text className="text-white text-xl">hi {tag}</Text>
       <Pressable onPress={onSettingsClick}>
         <Ionicons name="settings-outline" size={24} color={"white"} />

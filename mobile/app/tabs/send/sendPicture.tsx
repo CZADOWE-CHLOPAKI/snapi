@@ -22,8 +22,8 @@ const User = ({ name: title, onDeSelected, onSelected }: UserProps) => {
   return (
     <TouchableOpacity
       className={clsx(
-        "bg-gray-dark px-8 h-12 flex items-center flex-row  justify-between mb-2",
-        selected && "bg-gray-medium"
+        "bg-gray-dark px-8 h-10 flex items-center flex-row  justify-between mb-2",
+        selected && "bg-gray-light"
       )}
       onPress={() => {
         selected ? onDeSelected() : onSelected();
@@ -56,7 +56,7 @@ const SendPicture = () => {
   if (!pictureSent && onSendPressed) return <SpinnerPage />;
   return (
     <View className="bg-gray-dark h-full flex justify-center pt-8 ">
-      <Text className="text-xl text-white px-4 py-8">send to:</Text>
+      <Text className="text-xl text-white px-6 pb-3 ">send to:</Text>
       <FlatList
         data={friends}
         renderItem={({ item }) => (
