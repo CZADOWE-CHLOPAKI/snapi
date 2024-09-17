@@ -10,7 +10,7 @@ class UserBase(SQLModel):
     is_superuser: bool = False
     # TODO REMOVE
     full_name: str | None = Field(default=None, max_length=255)
-    tag: str = Field(max_length=255, unique=True)
+    tag: str = Field(max_length=255, unique=True)   
 
 
 

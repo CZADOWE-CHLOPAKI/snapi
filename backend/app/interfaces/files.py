@@ -33,6 +33,8 @@ class FileStorage:
 
 class OnDiskImageStorage(FileStorage):
     def save(self, file: BinaryIO | str):
+        self._ensure_dir()
+
         filename = f'{self._generate_unique_filename()}.jpeg'
         filepath = Path(settings.FILE_STORAGE_PATH) / filename
 

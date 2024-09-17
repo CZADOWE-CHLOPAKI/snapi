@@ -7,3 +7,5 @@ htmlcov
 .cache
 .venv
 app/photos/*
+backend/photos/*
+backend/app/photos/*

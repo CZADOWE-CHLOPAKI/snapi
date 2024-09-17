@@ -1,5 +1,6 @@
 import logging
 from logging.config import dictConfig as loggingDictConfig
+from pathlib import Path
 
 import sentry_sdk
 from fastapi import FastAPI
@@ -43,5 +44,9 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+
+if settings.ENVIRONMENT == 'local':
+    Path(settings.FILE_STORAGE_PATH).mkdir(parents=True, exist_ok=True)
 
 app.mount("/static/photos", StaticFiles(directory=settings.FILE_STORAGE_PATH), name="static-photos")

@@ -32,7 +32,7 @@ target_metadata = SQLModel.metadata
 
 def get_url():
     user = os.getenv("POSTGRES_USER", "postgres")
-    password = os.getenv("POSTGRES_PASSWORD", "")
+    password = os.getenv("POSTGRES_PASSWORD", "changethis")
     json_settings = os.getenv("POSTGRES_JSON_CREDENTIALS", None)
     if json_settings:
         credentials = json.loads(json_settings)
@@ -40,7 +40,7 @@ def get_url():
         password = credentials["password"]
 
     password = urllib.parse.quote_plus(password)
-    server = os.getenv("POSTGRES_SERVER", "db")
+    server = os.getenv("POSTGRES_SERVER", "localhost")
     port = os.getenv("POSTGRES_PORT", "5432")
     db = os.getenv("POSTGRES_DB", "app")
     return f"postgresql+psycopg://{user}:{password}@{server}:{port}/{db}"

@@ -140,7 +140,7 @@ class Settings(BaseSettings):
     USERS_OPEN_REGISTRATION: bool = True
 
     # files
-    FILE_STORAGE_PATH: str = "/app/app/photos"  # just for development
+    FILE_STORAGE_PATH: str = "photos"  # just for development
 
     # expo
     EXPO_TOKEN: str | None = None
